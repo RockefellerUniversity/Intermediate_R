@@ -1,0 +1,9 @@
+<br>
+
+#### **Intermediate R, Session 1**
+
+Introduction
+
+* What is tidyverse?
+* What is data.table?
+* What are the different use cases for base R, tidyverse and data.table?

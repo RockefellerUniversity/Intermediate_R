@@ -1,0 +1,9 @@
+<br>
+
+#### **Intermediate R, Session 4**
+
+Parallelization
+
+* BiocParallel
+* Futures and Furrr
+* Batchtools

@@ -1,0 +1,9 @@
+<br>
+
+#### **Intermediate R, Session 3**
+
+Data.table
+
+* Read, transform, subset, write operations
+* Parsing and summarizing data
+* Coercion between data frame types

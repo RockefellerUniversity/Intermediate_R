@@ -1,0 +1,12 @@
+<br>
+
+#### **Intermediate R, Session 2**
+
+Tidyverse
+
+* Tibble data frames
+* Joining, pivoting, uniting datasets
+* Parsing and summarizing dataset with dplyr
+* Manipulating strings with stringr
+* Functional programming with purrr
+* Reading data fast with vroom
