@@ -16,9 +16,8 @@ toMessage <- ifelse(!is.null(params$toMessage),params$toMessage,FALSE)
 message(toMessage)
 ```
 
-
 <p>&nbsp;</p>
-These exercises are about ??Add a summary of the topic?? [??Topic Name??](https://rockefelleruniversity.github.io/RU_course_template/). 
+These exercises are about ??Add a summary of the topic?? [??Topic Name??](https://rockefelleruniversity.github.io/Intermediate_R/). 
 
 **Exercise 1** - **??Ex 1 title if it has one??**
 

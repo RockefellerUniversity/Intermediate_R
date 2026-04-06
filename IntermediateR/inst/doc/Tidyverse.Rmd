@@ -1,7 +1,7 @@
 ---
-title: "My Exercise 1"
+title: "Tidyverse"
 author: "Rockefeller University, Bioinformatics Resource Centre"
-date: "https://rockefelleruniversity.github.io/RU_course_template/"
+date: "https://rockefelleruniversity.github.io/Intermediate_R/"
 output: 
   html_document:
     number_sections: false  ## if you want number sections at each table header
@@ -17,7 +17,7 @@ message(toMessage)
 ```
 
 <p>&nbsp;</p>
-These exercises cover the sections of [tidyverse session](https://rockefelleruniversity.github.io/RU_tidyverse/). 
+These exercises cover the sections of [tidyverse session](https://rockefelleruniversity.github.io/Intermediate_R/). 
 
 ```{r, setup,include=FALSE}
 toMessage <- ifelse(!is.null(params$toMessage),params$toMessage,FALSE)
