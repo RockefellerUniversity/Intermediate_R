@@ -156,7 +156,7 @@ expressed_norm$ENTREZ
 
 Lastly we can use the names. Similar to the tidyverse, data.table is aware of the column names and can interpret provided values. This means we do not have to be provided them as characters. Also, we can use tab-complete for completing these names. 
 
-```{r, subset5}
+```{r, subset5, eval=F}
 
 expressed_norm[, CellType]
 

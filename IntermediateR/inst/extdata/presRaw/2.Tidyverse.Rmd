@@ -32,7 +32,6 @@ suppressPackageStartupMessages(require(TxDb.Hsapiens.UCSC.hg38.knownGene))
 knitr::opts_chunk$set(echo = TRUE, tidy = T)
 ```
 
-
 ```{r, results='asis',include=TRUE,echo=FALSE}
 if(params$isSlides != "yes"){
   cat("# Intermediate R (part 2)
@@ -430,6 +429,7 @@ keys <- hg38_genes$gene_id
 symbols <- AnnotationDbi::select(org.Hs.eg.db, keys = keys, columns = c("SYMBOL"), keytype = "ENTREZID")
 
 ```
+
 ---
 ## Tibbles: Make your own
 
@@ -873,28 +873,28 @@ At its most basic **select** allows you to make a vector from a specific variabl
 
 *NOTE: We are directly pointing to the select function within dplyr by using two semi-colons. We have to do this if we have multiple packages loaded in with the same name. This is really common with the select function as it is quite a generic name.*
 
-```{r}
+```{r,select.1}
 dplyr::select(tidy_counts_meta, counts)
 ```
 
 ---
 ## dplyr::select
 **select** allows you to make a dataframe from several variables
-```{r}
+```{r,select.2}
 dplyr::select(tidy_counts_meta, counts, ENTREZ)
 ```
 
 ---
 ## dplyr::select
 **select** allows you to make a dataframe excluding a variable
-```{r}
+```{r,select.3}
 dplyr::select(tidy_counts_meta, -Sample)
 ```
 
 ---
 ## dplyr::select
 **select** allows you to make a dataframe from a range of variables
-```{r}
+```{r,select.4}
 dplyr::select(tidy_counts_meta, CellType:SYMBOL)
 ```
 
