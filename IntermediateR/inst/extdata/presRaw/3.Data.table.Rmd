@@ -537,7 +537,7 @@ GSE216319_TPM[, median(TPMs), by = Sample]
 
 Though this is pretty straightforward analysis, we can already start to see differences in memory usage and processing speed.
 
-```{r, echo=F, warning=F, message=F}
+```{r, echo=F, warning=F, message=F, eval=F}
 library(readr)
 library(dplyr)
 library(bench)
