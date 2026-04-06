@@ -1,7 +1,7 @@
 Package: IntermediateR
 Type: Package
 Title: Intermediate R
-Version: 1.0.0
+Version: 1.1.0
 Author: Matt Paul and Thomas Carroll.
 Maintainer: Thomas Carroll <tc.infomatics@gmail>
 Description: This package contains the course material for our Intermediate R course. 
@@ -9,8 +9,8 @@ License: What license is it under?
 LazyData: TRUE
 biocViews: Training
 Depends: methods, ggplot2, rmarkdown, rio, tidyverse, stringr, dplyr, 
-  data.table, purrr, furrr, batchtools, biocparallel, vroom, readr, tibble, 
-  forcats, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene
+  data.table, purrr, furrr, batchtools, BiocParallel, vroom, readr, tibble, 
+  forcats, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene, bench
 Suggests: knitr,
     rmarkdown,
     testthat,

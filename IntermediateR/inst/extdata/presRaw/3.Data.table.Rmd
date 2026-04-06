@@ -555,6 +555,7 @@ Though this is pretty straightforward analysis, we can already start to see diff
 ```{r, echo=F, warning=F, message=F}
 library(readr)
 library(dplyr)
+library(bench)
 
 base <- function(){
 GSE216319_TPM <- read.csv("data/GSE216319_TPM_PerSampleTable.csv")
