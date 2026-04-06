@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>My Course Template, Session 2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="http://rockefelleruniversity.github.io/RU_course_template/" />
+    <meta name="author" content="brc@rockefeller.edu" />
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
+    <link rel="stylesheet" href="default.css" type="text/css" />
+    <link rel="stylesheet" href="metropolisCustom.css" type="text/css" />
+    <link rel="stylesheet" href="metropolis-fontsCustom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: middle, inverse, title-slide
+
+.title[
+# My Course Template, Session 2
+]
+.subtitle[
+## <html><br />
+<br />
+<hr color='#EB811B' size=1px width=796px><br />
+</html><br />
+Bioinformatics Resource Center - Rockefeller University
+]
+.author[
+### <a href="http://rockefelleruniversity.github.io/RU_course_template/" class="uri">http://rockefelleruniversity.github.io/RU_course_template/</a>
+]
+.author[
+### <a href="mailto:brc@rockefeller.edu" class="email">brc@rockefeller.edu</a>
+]
+
+---
+
+
+
+
+
+
+##  Recap
+
+In the last session we learned all about tidyverse:
+
+* Easier reading and writing code
+* Tidy data and how to tidy
+* Magrittr for Piping
+* Dplyr for filtering, selecting, arranging, merging
+* Readr and vroom for reading and writing
+* Stringr for manipulating strings
+* Purrr for functional programming
+
+---
+## Plan
+
+- [Background to R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#background-to-r)
+- [Data types in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#data_types_in_r)
+- [Reading and writing in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#reading-and-writing-data-in-r)
+
+
+
+---
+class: inverse, center, middle
+
+# Making R faster with data.table
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+
+---
+
+
+## data.table
+
+*data.table* is another R package that provides a different version of a data.frame. data.tables have more features with an emphasis on speed of code evaluation and concise code. 
+
+An example of this is in the *order* function used by data.table which uses a very fast algorithm. The speed increase (~3-5x for 1-100 million data points) actually resulted in base R changing their own default sort algorithm. 
+
+## data.table philosophy
+
+Key concepts for data.table:
+  * Modify in place
+  * No copies unless necessary
+  * Compact syntax
+
+These goals are allow increased speed and memory. 
+
+---
+## Reading in a data.table
+
+The *fread()* function can import data straight into a data.table format. 
+
+
+``` r
+library(data.table)
+```
+
+```
+## 
+## Attaching package: 'data.table'
+```
+
+```
+## The following objects are masked from 'package:lubridate':
+## 
+##     hour, isoweek, isoyear, mday, minute, month, quarter, second, wday,
+##     week, yday, year
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     between, first, last
+```
+
+```
+## The following object is masked from 'package:purrr':
+## 
+##     transpose
+```
+
+```
+## The following object is masked from 'package:GenomicRanges':
+## 
+##     shift
+```
+
+```
+## The following object is masked from 'package:IRanges':
+## 
+##     shift
+```
+
+```
+## The following objects are masked from 'package:S4Vectors':
+## 
+##     first, second
+```
+
+``` r
+expressed_norm &lt;- fread("data/expressed_genes_output_norm.csv")
+
+expressed_norm
+```
+
+```
+##      ENTREZ  Sample CellType   Rep counts count_total          CPM SYMBOL
+##       &lt;int&gt;  &lt;char&gt;   &lt;char&gt; &lt;int&gt;  &lt;int&gt;       &lt;int&gt;        &lt;num&gt; &lt;char&gt;
+##   1:    350  CD34_1     CD34     1    204         307 1.362371e+03   APOH
+##   2:    351  CD34_1     CD34     1  15586       26580 1.040878e+05    APP
+##   3:    353  CD34_1     CD34     1    842        2471 5.623118e+03   APRT
+##   4:    355  CD34_1     CD34     1    123         569 8.214293e+02    FAS
+##   5:    356  CD34_1     CD34     1      1           2 6.678287e+00  FASLG
+##  ---                                                                     
+## 368:    489 ORTHO_2    ORTHO     2      8        6814 2.431241e+02 ATP2A3
+## 369:    490 ORTHO_2    ORTHO     2    665        4451 2.020969e+04 ATP2B1
+## 370:    491 ORTHO_2    ORTHO     2      0          17 0.000000e+00 ATP2B2
+## 371:    492 ORTHO_2    ORTHO     2      0          10 0.000000e+00 ATP2B3
+## 372:    493 ORTHO_2    ORTHO     2    743       12392 2.258015e+04 ATP2B4
+##         CHR LENGTH         TPM
+##      &lt;char&gt;  &lt;int&gt;       &lt;num&gt;
+##   1:  chr17   1332  4067.56169
+##   2:  chr21   6608 62643.04260
+##   3:  chr16   1796 12451.27901
+##   4:  chr10  29313   111.44307
+##   5:   chr1   1805    14.71401
+##  ---                          
+## 368:  chr17   6893   127.10240
+## 369:  chr12   9523  7647.50723
+## 370:   chr3  10260     0.00000
+## 371:   chrX  10469     0.00000
+## 372:   chr1   9502  8563.39196
+```
+
+---
+## Indexing
+
+Indexing data.tables works in a similar way to data.frames using the square brackets *[,]*.
+
+
+``` r
+expressed_norm[1, 1]
+```
+
+```
+## [1] 350
+```
+
+
+``` r
+expressed_norm[1, ]
+```
+
+```
+##    ENTREZ Sample CellType   Rep counts count_total      CPM SYMBOL    CHR
+##     &lt;int&gt; &lt;char&gt;   &lt;char&gt; &lt;int&gt;  &lt;int&gt;       &lt;int&gt;    &lt;num&gt; &lt;char&gt; &lt;char&gt;
+## 1:    350 CD34_1     CD34     1    204         307 1362.371   APOH  chr17
+##    LENGTH      TPM
+##     &lt;int&gt;    &lt;num&gt;
+## 1:   1332 4067.562
+```
+
+
+``` r
+expressed_norm[, 1]
+```
+
+```
+##   [1] 350 351 353 355 356 357 358 359 360 361 362 363 364 366 367 369 372 373
+##  [19] 374 375 377 378 379 381 382 383 384 387 388 389 390 391 392 393 394 395
+##  [37] 396 397 399 400 402 403 405 406 407 408 409 410 411 412 414 415 416 419
+##  [55] 420 421 427 429 430 432 433 434 435 440 443 444 445 460 462 463 466 467
+##  [73] 468 471 472 473 475 476 477 478 479 480 481 482 483 486 487 488 489 490
+##  [91] 491 492 493 350 351 353 355 356 357 358 359 360 361 362 363 364 366 367
+## [109] 369 372 373 374 375 377 378 379 381 382 383 384 387 388 389 390 391 392
+## [127] 393 394 395 396 397 399 400 402 403 405 406 407 408 409 410 411 412 414
+## [145] 415 416 419 420 421 427 429 430 432 433 434 435 440 443 444 445 460 462
+## [163] 463 466 467 468 471 472 473 475 476 477 478 479 480 481 482 483 486 487
+## [181] 488 489 490 491 492 493 350 351 353 355 356 357 358 359 360 361 362 363
+## [199] 364 366 367 369 372 373 374 375 377 378 379 381 382 383 384 387 388 389
+## [217] 390 391 392 393 394 395 396 397 399 400 402 403 405 406 407 408 409 410
+## [235] 411 412 414 415 416 419 420 421 427 429 430 432 433 434 435 440 443 444
+## [253] 445 460 462 463 466 467 468 471 472 473 475 476 477 478 479 480 481 482
+## [271] 483 486 487 488 489 490 491 492 493 350 351 353 355 356 357 358 359 360
+## [289] 361 362 363 364 366 367 369 372 373 374 375 377 378 379 381 382 383 384
+## [307] 387 388 389 390 391 392 393 394 395 396 397 399 400 402 403 405 406 407
+## [325] 408 409 410 411 412 414 415 416 419 420 421 427 429 430 432 433 434 435
+## [343] 440 443 444 445 460 462 463 466 467 468 471 472 473 475 476 477 478 479
+## [361] 480 481 482 483 486 487 488 489 490 491 492 493
+```
+
+---
+## Special Indexing
+
+That said you can also just supply a single value. This is a row oriented evaluation. 
+
+
+``` r
+expressed_norm[1]
+```
+
+```
+##      ENTREZ
+##       &lt;int&gt;
+##   1:    350
+##   2:    351
+##   3:    353
+##   4:    355
+##   5:    356
+##  ---       
+## 368:    489
+## 369:    490
+## 370:    491
+## 371:    492
+## 372:    493
+```
+
+---
+## Special Indexing
+
+You can also grab the column information using the double square brackets similar to a list (likewise you could also use a dollar sign).
+
+
+``` r
+expressed_norm[[1]]
+```
+
+```
+##   [1] 350 351 353 355 356 357 358 359 360 361 362 363 364 366 367 369 372 373
+##  [19] 374 375 377 378 379 381 382 383 384 387 388 389 390 391 392 393 394 395
+##  [37] 396 397 399 400 402 403 405 406 407 408 409 410 411 412 414 415 416 419
+##  [55] 420 421 427 429 430 432 433 434 435 440 443 444 445 460 462 463 466 467
+##  [73] 468 471 472 473 475 476 477 478 479 480 481 482 483 486 487 488 489 490
+##  [91] 491 492 493 350 351 353 355 356 357 358 359 360 361 362 363 364 366 367
+## [109] 369 372 373 374 375 377 378 379 381 382 383 384 387 388 389 390 391 392
+## [127] 393 394 395 396 397 399 400 402 403 405 406 407 408 409 410 411 412 414
+## [145] 415 416 419 420 421 427 429 430 432 433 434 435 440 443 444 445 460 462
+## [163] 463 466 467 468 471 472 473 475 476 477 478 479 480 481 482 483 486 487
+## [181] 488 489 490 491 492 493 350 351 353 355 356 357 358 359 360 361 362 363
+## [199] 364 366 367 369 372 373 374 375 377 378 379 381 382 383 384 387 388 389
+## [217] 390 391 392 393 394 395 396 397 399 400 402 403 405 406 407 408 409 410
+## [235] 411 412 414 415 416 419 420 421 427 429 430 432 433 434 435 440 443 444
+## [253] 445 460 462 463 466 467 468 471 472 473 475 476 477 478 479 480 481 482
+## [271] 483 486 487 488 489 490 491 492 493 350 351 353 355 356 357 358 359 360
+## [289] 361 362 363 364 366 367 369 372 373 374 375 377 378 379 381 382 383 384
+## [307] 387 388 389 390 391 392 393 394 395 396 397 399 400 402 403 405 406 407
+## [325] 408 409 410 411 412 414 415 416 419 420 421 427 429 430 432 433 434 435
+## [343] 440 443 444 445 460 462 463 466 467 468 471 472 473 475 476 477 478 479
+## [361] 480 481 482 483 486 487 488 489 490 491 492 493
+```
+
+``` r
+expressed_norm$ENTREZ
+```
+
+```
+##   [1] 350 351 353 355 356 357 358 359 360 361 362 363 364 366 367 369 372 373
+##  [19] 374 375 377 378 379 381 382 383 384 387 388 389 390 391 392 393 394 395
+##  [37] 396 397 399 400 402 403 405 406 407 408 409 410 411 412 414 415 416 419
+##  [55] 420 421 427 429 430 432 433 434 435 440 443 444 445 460 462 463 466 467
+##  [73] 468 471 472 473 475 476 477 478 479 480 481 482 483 486 487 488 489 490
+##  [91] 491 492 493 350 351 353 355 356 357 358 359 360 361 362 363 364 366 367
+## [109] 369 372 373 374 375 377 378 379 381 382 383 384 387 388 389 390 391 392
+## [127] 393 394 395 396 397 399 400 402 403 405 406 407 408 409 410 411 412 414
+## [145] 415 416 419 420 421 427 429 430 432 433 434 435 440 443 444 445 460 462
+## [163] 463 466 467 468 471 472 473 475 476 477 478 479 480 481 482 483 486 487
+## [181] 488 489 490 491 492 493 350 351 353 355 356 357 358 359 360 361 362 363
+## [199] 364 366 367 369 372 373 374 375 377 378 379 381 382 383 384 387 388 389
+## [217] 390 391 392 393 394 395 396 397 399 400 402 403 405 406 407 408 409 410
+## [235] 411 412 414 415 416 419 420 421 427 429 430 432 433 434 435 440 443 444
+## [253] 445 460 462 463 466 467 468 471 472 473 475 476 477 478 479 480 481 482
+## [271] 483 486 487 488 489 490 491 492 493 350 351 353 355 356 357 358 359 360
+## [289] 361 362 363 364 366 367 369 372 373 374 375 377 378 379 381 382 383 384
+## [307] 387 388 389 390 391 392 393 394 395 396 397 399 400 402 403 405 406 407
+## [325] 408 409 410 411 412 414 415 416 419 420 421 427 429 430 432 433 434 435
+## [343] 440 443 444 445 460 462 463 466 467 468 471 472 473 475 476 477 478 479
+## [361] 480 481 482 483 486 487 488 489 490 491 492 493
+```
+
+---
+## Special Indexing
+
+Lastly we can use the names. Similar to the tidyverse, data.table is aware of the column names and can interpret provided values. This means we do not have to be provided them as characters. Also, we can use tab-complete for completing these names. 
+
+
+``` r
+a &lt;- class(expressed_norm)
+write.table(a, "test.txt")
+a &lt;- names(expressed_norm)
+write.table(a, "test2.txt")
+```
+
+
+
+
+``` r
+expressed_norm[, CellType]
+```
+
+---
+## Special Indexing
+
+Providing the column name as it is will gives back a vector. If we want a data.table we must give our column names as a list. 
+
+
+``` r
+expressed_norm[, list(CellType)]
+```
+
+---
+## Special Indexing
+
+As we have mentioned data.table does some interpretation of the inputs, allowing for more complex and concise operations. One of these is additional data.table specific nomenclature. One of these is the period *.()* can be used as an alias for *list()*.
+
+
+``` r
+expressed_norm[, .(CellType)]
+```
+
+ 
+---
+## Special Indexing
+
+As we are using a list, we can also subset our data.table to multiple columns using a list with multiple column names. 
+
+
+``` r
+expressed_norm[, .(Sample, CellType)]
+```
+
+
+---
+## Ordering
+
+We can use the order function to sort the data.table based on a specific column, in this case counts. We can modify the direction of the ordering simply using a minus sign: **-**.
+
+
+  .pull-left[
+
+``` r
+expressed_norm[order(counts)]
+```
+]
+
+  .pull-right[
+
+``` r
+expressed_norm[order(-counts)]
+```
+
+]
+
+---
+## Filtering
+
+You can filter in much the same way as regular data frames. 
+
+
+``` r
+expressed_norm[Sample == "CD34_1"]
+```
+
+---
+## Functions and summaries
+
+As we have mentioned data.table does some interpretation of the indexing input. Here we call functions within our square brackets to generate some summary information.
+
+
+``` r
+expressed_norm[, mean(TPM)]
+```
+
+---
+## Functions and summaries
+
+We can combine this with subsetting and do multiple function evaluations to do some complex summarizations.  
+
+
+``` r
+expressed_norm[Sample == "CD34_1", .(mean_counts = mean(counts), mean_tpm = mean(TPM))]
+```
+
+
+---
+## Functions and summaries
+
+Alternatively we could do some evaluation of logical expressions. In this case we will see how many genes have a TPM greater than 100. 
+
+
+``` r
+expressed_norm[Sample == "CD34_1", sum(TPM &gt; 100)]
+```
+
+---
+## Grouping and Summaries
+
+We can use the *by* argument to also allow for grouping and summarization of data. This is a one step operation that does not require saving intermediate (base R) or piping (tidy R).
+
+
+``` r
+expressed_norm[, sum(counts), by = Sample]
+```
+
+---
+## Grouping multiple variables
+
+We can also use the same approach to summarize multiple aspects of our data. That said you will need to wrap it as a list. 
+
+
+``` r
+expressed_norm[, .(counts.sum = sum(counts), counts.median = median(counts)), by = Sample]
+```
+
+---
+## In-place assignment
+
+The := allows for in-place assignment and modifcation of our table. We can quickly add columns, without intermediates.
+
+
+``` r
+expressed_norm[, RPKM := CPM/(LENGTH/1000)]
+expressed_norm
+```
+
+---
+## In-place assignment
+
+This can be used in conjunction with filters to create conditional entries into our data.table. 
+
+
+``` r
+expressed_norm[TPM &gt; 10, flag := TRUE]
+expressed_norm
+```
+
+---
+## In-place assignment
+
+We can also use this operation to assign NULL values which essentially removes columns. 
+
+
+``` r
+expressed_norm[, flag := NULL]
+```
+
+---
+## Setting keys for speed
+
+We can increase the speed of data.table operations by setting a key. This sorts and indexes the column. This makes it easier (and more importantly faster) for to search within this column. 
+
+
+``` r
+setkey(expressed_norm, ENTREZ)
+expressed_norm
+```
+
+Though it takes time up front to set keys, this quickly becomes time efficient if you are planning on repeatedly filtering your table or joining it with other tables. 
+
+---
+## Binary search
+
+Previously we have showed you how to subset an array using regular indexing. Under the hood this is doing a linear scan i.e. it start at position one, see if it matches, then moves on. 
+
+
+``` r
+expressed_norm[ENTREZ == 483]
+```
+
+If a key has been set a binary search can be performed on this column, which is exponentially faster. It uses the fact that it is sorted to jump through the data in large steps while looking for matches. 
+
+
+``` r
+expressed_norm[.(483)]
+```
+
+---
+# Keys with multiple variables
+
+You can make a key from multiple variables. We are not showing it here, but this can be nice for working with genomic ranges (i.e. chromosome, start, end, strand)
+
+
+``` r
+setkey(expressed_norm, ENTREZ, CellType)
+expressed_norm[.(483, "CD34")]
+```
+
+---
+# Multiple Keys
+
+You cannot have multiple keys, as an intrinsic part of the key is that the data.table is sorted based on it. You can create an index though. This is a precomputed map from values to row positions. Data.table can then use this to jump directly to matches. 
+
+
+``` r
+setindex(expressed_norm, CellType)
+expressed_norm[.("CD34"), on = "CellType"]
+```
+
+
+---
+class: inverse, center, middle
+
+# Coercion and Import/Export
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+
+---
+
+
+# Coercion
+
+As with other data types we can easily convert between data.tables and other types of data frames using the appropriate as.*new.object* functions.
+
+
+
+``` r
+is(expressed_norm)
+```
+
+
+``` r
+df &lt;- as.data.frame(expressed_norm)
+is(df)
+```
+
+
+``` r
+tibb &lt;- as_tibble(expressed_norm)
+is(tibb)
+```
+
+---
+# Coercion
+
+We can also go back the other way with as.data.table. 
+
+
+``` r
+as.data.table(tibb)
+```
+
+---
+# Data import
+
+The input and output of data is often one of the most time consuming parts of bioinformatics analysis. This is because we are handling large memory-intensive datasets. 
+
+We have used a basic fread() to read in our data so far.
+
+
+``` r
+expressed_norm &lt;- fread("data/expressed_genes_output_norm.csv")
+```
+
+---
+# Data import
+
+To help improve speed we can use multiple threads (readr also has a similar argument).
+
+
+``` r
+expressed_norm &lt;- fread("data/expressed_genes_output_norm.csv", nThread = 4)
+```
+
+---
+# Data import
+
+Instead of providing a path to file, you can also provide a cmd that pipes in a preprocessed file.
+
+In this case we are using awk to filter our file down to CD34_1 only and also give us only the 1st, 2nd and 5th column. A similar approach can help read in compressed files directly.
+
+
+``` r
+expressed_norm_sub &lt;- fread(cmd = "awk -F',' -v OFS=',' '$2==\"CD34_1\" {print $1, $2, $5}' data/expressed_genes_output_norm.csv",
+    nThread = 4)
+head(expressed_norm_sub)
+```
+
+---
+# Data export
+
+The counterpart to fread, is fwrite. There are similar advanced utilities and arguments for write as well as read. 
+
+For example here we will compress the file on export. 
+
+
+``` r
+fwrite(expressed_norm_sub, file = "data/expressed_norm_sub.tsv.gz", sep = "\t", nThread = 8,
+    compress = "gzip")
+```
+
+---
+class: inverse, center, middle
+
+# Speed and Memory Comparison
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+
+---
+
+
+
+
+---
+# Lets Compare - base R
+
+Let's do a quick review and test. We will read in and perform some data summarization using a full dataset.
+
+In baseR this is a simple two step process.
+
+
+``` r
+GSE216319_TPM &lt;- read.csv("data/GSE216319_TPM_PerSampleTable.csv")
+aggregate(counts ~ Sample, data = GSE216319_TPM, sum)
+```
+
+---
+# Lets Compare - Tidy and data.table
+
+  .pull-left[
+  
+In tidy it requires a few more lines, but is a little more intuitive. 
+
+``` r
+GSE216319_TPM &lt;- read_csv("data/GSE216319_TPM_PerSampleTable.csv")
+GSE216319_TPM %&gt;%
+    group_by(Sample) %&gt;%
+    summarise(counts = median(TPMs), .groups = "drop")
+```
+]
+
+  .pull-right[
+While data.table it just requires a modified indexing operation. 
+
+``` r
+GSE216319_TPM &lt;- fread("data/GSE216319_TPM_PerSampleTable.csv")
+GSE216319_TPM[, median(TPMs), by = Sample]
+```
+]
+
+---
+# Lets Compare - Speed and Memory
+
+Though this is pretty straightforward analysis, we can already start to see differences in memory usage and processing speed.
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
