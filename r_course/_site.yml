@@ -1,6 +1,6 @@
 output_dir: '.'
 navbar:
-  title: Template Package for Courses
+  title: Intermediate R
   left:
   - text: Home
     href: index.html
@@ -9,42 +9,64 @@ navbar:
     - text: Session1
       menu:
       - text: Slide
-        href: presentations/slides/Session1.html
+        href: presentations/slides/1.Intro.html
       - text: Single Page
-        href: presentations/singlepage/Session1.html
+        href: presentations/singlepage/1.Intro.html
       - text: Code
-        href: presentations/r_code/Session1.R
+        href: presentations/r_code/1.Intro.R
     - text: Session2
       menu:
       - text: Slide
-        href: presentations/slides/Session2.html
+        href: presentations/slides/2.Tidyverse.html
       - text: Single Page
-        href: presentations/singlepage/Session2.html
+        href: presentations/singlepage/2.Tidyverse.html
       - text: Code
-        href: presentations/r_code/Session2.R
+        href: presentations/r_code/2.Tidyverse.R
+    - text: Session3
+      menu:
+      - text: Slide
+        href: presentations/slides/3.Data.table.html
+      - text: Single Page
+        href: presentations/singlepage/3.Data.table.html
+      - text: Code
+        href: presentations/r_code/3.Data.table.R
+    - text: Session4
+      menu:
+      - text: Slide
+        href: presentations/slides/4.Parallelization.html
+      - text: Single Page
+        href: presentations/singlepage/4.Parallelization.html
+      - text: Code
+        href: presentations/r_code/4.Parallelization.R
   - text: Exercises
     menu:
-    - text: MyExercise1
+    - text: Intro
       menu:
       - text: Exercise
-        href: exercises/exercises/MyExercise1_exercise.html
+        href: exercises/exercises/Intro_exercise.html
       - text: Solution
-        href: exercises/answers/MyExercise1_answers.html
-    - text: MyExercise2
+        href: exercises/answers/Intro_answers.html
+    - text: Tidyverse
       menu:
       - text: Exercise
-        href: exercises/exercises/MyExercise2_exercise.html
+        href: exercises/exercises/Tidyverse_exercise.html
       - text: Solution
-        href: exercises/answers/MyExercise2_answers.html
-    - text: MyExercise3
+        href: exercises/answers/Tidyverse_answers.html
+    - text: Data.table
       menu:
       - text: Exercise
-        href: exercises/exercises/MyExercise3_exercise.html
+        href: exercises/exercises/Data.table_exercise.html
       - text: Solution
-        href: exercises/answers/MyExercise3_answers.html
+        href: exercises/answers/Data.table_answers.html
+    - text: Parallelization
+      menu:
+      - text: Exercise
+        href: exercises/exercises/Parallelization_exercise.html
+      - text: Solution
+        href: exercises/answers/Parallelization_answers.html
   right:
   - text: Getting help!
-    href: https://github.com//RockefellerUniversity/RU_course_template/issues
+    href: https://github.com//RockefellerUniversity/Intermediate_R/issues
   - href: https://twitter.com/Rockefeller_BRC
     icon: ion-social-twitter
 output:
