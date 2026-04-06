@@ -198,7 +198,7 @@ expressed_norm[, .(CellType)]
 
 As we are using a list, we can also subset our data.table to multiple columns using a list with multiple column names. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[, .(Sample, CellType)]
 
 ```
@@ -211,13 +211,13 @@ We can use the order function to sort the data.table based on a specific column,
 
 
   .pull-left[
-```{r}
+```{r, eval=F}
 expressed_norm[order(counts)]
 ```
 ]
 
   .pull-right[
-```{r}
+```{r, eval=F}
 expressed_norm[order(-counts)]
 ```
 
@@ -228,7 +228,7 @@ expressed_norm[order(-counts)]
 
 You can filter in much the same way as regular data frames. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[Sample == "CD34_1"]
 ```
 
@@ -237,7 +237,7 @@ expressed_norm[Sample == "CD34_1"]
 
 As we have mentioned data.table does some interpretation of the indexing input. Here we call functions within our square brackets to generate some summary information.
 
-```{r}
+```{r, eval=F}
 expressed_norm[, mean(TPM)]
 
 ```
@@ -247,7 +247,7 @@ expressed_norm[, mean(TPM)]
 
 We can combine this with subsetting and do multiple function evaluations to do some complex summarizations.  
 
-```{r}
+```{r, eval=F}
 expressed_norm[Sample == "CD34_1",
                .(mean_counts = mean(counts),
                mean_tpm = mean(TPM))]
@@ -260,7 +260,7 @@ expressed_norm[Sample == "CD34_1",
 
 Alternatively we could do some evaluation of logical expressions. In this case we will see how many genes have a TPM greater than 100. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[Sample == "CD34_1",
                sum(TPM > 100)]
 
@@ -271,7 +271,7 @@ expressed_norm[Sample == "CD34_1",
 
 We can use the *by* argument to also allow for grouping and summarization of data. This is a one step operation that does not require saving intermediate (base R) or piping (tidy R).
 
-```{r}
+```{r, eval=F}
 expressed_norm[,sum(counts), by = Sample]
 
 ```
@@ -281,7 +281,7 @@ expressed_norm[,sum(counts), by = Sample]
 
 We can also use the same approach to summarize multiple aspects of our data. That said you will need to wrap it as a list. 
 
-```{r}
+```{r, eval=F}
 
 expressed_norm[,.(counts.sum=sum(counts),
                   counts.median=median(counts)), by = Sample]
@@ -293,7 +293,7 @@ expressed_norm[,.(counts.sum=sum(counts),
 
 The := allows for in-place assignment and modifcation of our table. We can quickly add columns, without intermediates.
 
-```{r}
+```{r, eval=F}
 expressed_norm[, RPKM := CPM/(LENGTH/1000) ]
 expressed_norm
 ```
@@ -303,7 +303,7 @@ expressed_norm
 
 This can be used in conjunction with filters to create conditional entries into our data.table. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[TPM > 10, flag := TRUE]
 expressed_norm
 ```
@@ -313,7 +313,7 @@ expressed_norm
 
 We can also use this operation to assign NULL values which essentially removes columns. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[, flag := NULL]
 ```
 
@@ -322,7 +322,7 @@ expressed_norm[, flag := NULL]
 
 We can increase the speed of data.table operations by setting a key. This sorts and indexes the column. This makes it easier (and more importantly faster) for to search within this column. 
 
-```{r}
+```{r, eval=F}
 setkey(expressed_norm, ENTREZ)
 expressed_norm
 ```
@@ -334,14 +334,14 @@ Though it takes time up front to set keys, this quickly becomes time efficient i
 
 Previously we have showed you how to subset an array using regular indexing. Under the hood this is doing a linear scan i.e. it start at position one, see if it matches, then moves on. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[ENTREZ == 483]
 
 ```
 
 If a key has been set a binary search can be performed on this column, which is exponentially faster. It uses the fact that it is sorted to jump through the data in large steps while looking for matches. 
 
-```{r}
+```{r, eval=F}
 expressed_norm[.(483)]
 
 ```
@@ -351,7 +351,7 @@ expressed_norm[.(483)]
 
 You can make a key from multiple variables. We are not showing it here, but this can be nice for working with genomic ranges (i.e. chromosome, start, end, strand)
 
-```{r}
+```{r, eval=F}
 setkey(expressed_norm, ENTREZ, CellType)
 expressed_norm[.(483,"CD34")]
 ```
@@ -361,7 +361,7 @@ expressed_norm[.(483,"CD34")]
 
 You cannot have multiple keys, as an intrinsic part of the key is that the data.table is sorted based on it. You can create an index though. This is a precomputed map from values to row positions. Data.table can then use this to jump directly to matches. 
 
-```{r}
+```{r, eval=F}
 setindex(expressed_norm, CellType)
 expressed_norm[.("CD34"), on = "CellType"]
 
@@ -396,16 +396,16 @@ if(params$isSlides == "yes"){
 As with other data types we can easily convert between data.tables and other types of data frames using the appropriate as.*new.object* functions.
 
 
-```{r}
+```{r, eval=F}
 is(expressed_norm)
 ```
 
-```{r}
+```{r, eval=F}
 df <- as.data.frame(expressed_norm)
 is(df)
 ```
 
-```{r}
+```{r, eval=F}
 tibb <- as_tibble(expressed_norm)
 is(tibb)
 ```
@@ -415,7 +415,7 @@ is(tibb)
 
 We can also go back the other way with as.data.table. 
 
-```{r}
+```{r, eval=F}
 as.data.table(tibb)
 ```
 
@@ -426,7 +426,7 @@ The input and output of data is often one of the most time consuming parts of bi
 
 We have used a basic fread() to read in our data so far.
 
-```{r}
+```{r, eval=F}
 expressed_norm <- fread("data/expressed_genes_output_norm.csv")
 
 ```
@@ -436,7 +436,7 @@ expressed_norm <- fread("data/expressed_genes_output_norm.csv")
 
 To help improve speed we can use multiple threads (readr also has a similar argument).
 
-```{r}
+```{r, eval=F}
 expressed_norm <- fread("data/expressed_genes_output_norm.csv",
                         nThread = 4)
 
@@ -449,7 +449,7 @@ Instead of providing a path to file, you can also provide a cmd that pipes in a 
 
 In this case we are using awk to filter our file down to CD34_1 only and also give us only the 1st, 2nd and 5th column. A similar approach can help read in compressed files directly.
 
-```{r}
+```{r, eval=F}
 expressed_norm_sub <- fread(cmd = "awk -F',' -v OFS=',' '$2==\"CD34_1\" {print $1, $2, $5}' data/expressed_genes_output_norm.csv",
              nThread = 4)
 head(expressed_norm_sub)
@@ -462,35 +462,9 @@ The counterpart to fread, is fwrite. There are similar advanced utilities and ar
 
 For example here we will compress the file on export. 
 
-```{r}
+```{r, eval=F}
 fwrite(expressed_norm_sub, file = "data/expressed_norm_sub.tsv.gz",
        sep = "\t", nThread = 8, compress = "gzip")
-```
-
-```{r}
-
-
-# C) chunked writes (process huge file in pieces)
-first <- TRUE
-for (chunk in chunk_generator()) {   # chunk_generator() yields data.tables
-  if (first) {
-    fwrite(chunk, file = "out/genes_large.tsv.gz", sep = "\t", quote = FALSE,
-           na = "", nThread = 4, compress = "gzip", col.names = TRUE)
-    first <- FALSE
-  } else {
-    fwrite(chunk, file = "out/genes_large.tsv.gz", sep = "\t", quote = FALSE,
-           na = "", nThread = 4, compress = "gzip", append = TRUE, col.names = FALSE)
-  }
-  rm(chunk); gc()
-}
-
-# D) produce bgzip (tabix) output via a pipe (bgzip must be in PATH)
-con <- pipe("bgzip -c > out/genes.bgz", "w")
-fwrite(dt, file = con, sep = "\t", quote = FALSE, na = "", nThread = 4, col.names = TRUE)
-close(con)
-# then create index with tabix (if needed)
-system2("tabix", c("-p", "bed", "out/genes.bgz"))
-
 ```
 
 ---
@@ -525,7 +499,7 @@ Let's do a quick review and test. We will read in and perform some data summariz
 
 In baseR this is a simple two step process.
 
-```{r}
+```{r, eval=F}
 
 GSE216319_TPM <- read.csv("data/GSE216319_TPM_PerSampleTable.csv")
 aggregate(counts ~ Sample, data = GSE216319_TPM, sum)
@@ -538,7 +512,7 @@ aggregate(counts ~ Sample, data = GSE216319_TPM, sum)
   .pull-left[
   
 In tidy it requires a few more lines, but is a little more intuitive. 
-```{r}
+```{r, eval=F}
 
 GSE216319_TPM <- read_csv("data/GSE216319_TPM_PerSampleTable.csv")
 GSE216319_TPM %>%
@@ -550,7 +524,7 @@ GSE216319_TPM %>%
 
   .pull-right[
 While data.table it just requires a modified indexing operation. 
-```{r}
+```{r, eval=F}
 
 GSE216319_TPM <- fread("data/GSE216319_TPM_PerSampleTable.csv")
 GSE216319_TPM[, median(TPMs), by = Sample]
@@ -610,25 +584,6 @@ colnames(timings) <- c("Time/ms","Memory Used")
 timings
 ```
 
-# Use Cases
 
 
-    
-
-        * use case comparisons to base, tidy and data.table
-    - overlap range tools (mention)
-
----
-## Time for an exercise!
-
-
-Exercise on functions can be found [here](../..//exercises/exercises/MyExercise3_exercise.html)
-
----
-## Answers to exercise.
-
-
-Answers can be found here  [here](../..//exercises/answers/MyExercise3_answers.html)
-
-Rcode for answers can be found here  [here](../..//exercises/answers//answers/MyExercise3_Answers.R)
 
