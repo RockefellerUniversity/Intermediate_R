@@ -1430,6 +1430,7 @@ tidy_counts_nest <- tidy_counts_nest %>%
 
 tidy_counts_nest
 ```
+
 ---
 ## broom::tidy - making models legible 
 ```{r}

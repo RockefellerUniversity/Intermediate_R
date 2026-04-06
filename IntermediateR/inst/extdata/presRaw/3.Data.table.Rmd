@@ -105,7 +105,7 @@ These goals are allow increased speed and memory.
 
 The *fread()* function can import data straight into a data.table format. 
 
-```{R}
+```{R, read}
 library(data.table)
 
 expressed_norm <- fread("data/expressed_genes_output_norm.csv")
@@ -118,7 +118,7 @@ expressed_norm
 
 Indexing data.tables works in a similar way to data.frames using the square brackets *[,]*.
 
-```{r}
+```{r, subset1}
 expressed_norm[1,1]
 ```
 
@@ -126,7 +126,7 @@ expressed_norm[1,1]
 expressed_norm[1,]
 ```
 
-```{r}
+```{r, subset2}
 expressed_norm[,1]
 ```
 
@@ -135,7 +135,7 @@ expressed_norm[,1]
 
 That said you can also just supply a single value. This is a row oriented evaluation. 
 
-```{r}
+```{r, subset3}
 expressed_norm[1]
 
 ```
@@ -145,7 +145,7 @@ expressed_norm[1]
 
 You can also grab the column information using the double square brackets similar to a list (likewise you could also use a dollar sign).
 
-```{r}
+```{r, subset4}
 expressed_norm[[1]]
 expressed_norm$ENTREZ
 
@@ -156,7 +156,7 @@ expressed_norm$ENTREZ
 
 Lastly we can use the names. Similar to the tidyverse, data.table is aware of the column names and can interpret provided values. This means we do not have to be provided them as characters. Also, we can use tab-complete for completing these names. 
 
-```{r}
+```{r, subset5}
 
 expressed_norm[, CellType]
 
@@ -177,7 +177,7 @@ expressed_norm[, list(CellType )]
 As we have mentioned data.table does some interpretation of the inputs, allowing for more complex and concise operations. One of these is additional data.table specific nomenclature. One of these is the period *.()* can be used as an alias for *list()*.
 
 ```{r}
-expressed_norm[, .(CellType )]
+expressed_norm[, .(CellType)]
 
 ```
 
