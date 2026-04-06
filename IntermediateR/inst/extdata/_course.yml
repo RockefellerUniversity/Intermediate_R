@@ -5,4 +5,4 @@ Presentations:
     titles: Session1 Session2 Session3 Session4
     PresRmd: 1.Intro.Rmd 2.Tidyverse.Rmd 3.Data.table.Rmd 4.Parallelization.Rmd
     PresOverviewRmd: Session1Overview.Rmd Session2Overview.Rmd Session3Overview.Rmd Session4Overview.Rmd
-    Exercises: Tidyverse.Rmd Data.table.Rmd Parallelization.Rmd
+    Exercises: Intro.Rmd Tidyverse.Rmd Data.table.Rmd Parallelization.Rmd
