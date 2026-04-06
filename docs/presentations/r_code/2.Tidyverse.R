@@ -22,7 +22,17 @@ if(params$isSlides != "yes"){
 
 
 ## ----results='asis',include=TRUE,echo=FALSE-----------------------------------
-if(params$isSlides != "yes"){
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Making R easier with Tidyverse
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
   cat("# Making R easier with Tidyverse
 
 ---
@@ -693,20 +703,6 @@ untidy_counts %>%
 untidy_counts %>% 
   dplyr::select(-ENTREZ) %>% 
   map_dbl(mean)
-
-
-## -----------------------------------------------------------------------------
-
-tidy_counts %>% 
-  group_by(Sample) %>% 
-  summarize(mean_counts = mean(counts))
-
-
-## -----------------------------------------------------------------------------
-
-tidy_counts %>% 
-  split(.$Sample) %>% 
-  map_dbl(~mean(.$counts))
 
 
 ## -----------------------------------------------------------------------------

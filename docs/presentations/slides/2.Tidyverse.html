@@ -49,6 +49,14 @@ Bioinformatics Resource Center - Rockefeller University
 - [Working with factors with forcats]() 
 
 
+---
+class: inverse, center, middle
+
+# Making R easier with Tidyverse
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#EB811B' size=1px width=720px&gt;&lt;/html&gt; 
+
+---
 
 ## Data wrangling with the Tidyverse
 
@@ -822,7 +830,7 @@ untidy_counts
 ```
 
 ---
-## Reshape data with pivot_longer and pivot_wider
+## Reshape data with pivot_*
 
 In this case we have multiple samples as columns. Though this is intuitive for some analyses and plotting, often this is not what we want and it is untidy. When all the data is in the wrong orientation, tidyr has some tools to move the data around quickly and easily:  
 
@@ -1068,7 +1076,7 @@ Piping allows you to pass the result from one expression directly into another. 
 
 How does this work with R? We follow a specific logical flow:
 
-![dplyr](./imgs/dplyr_pipe2.png)
+![dplyr](./imgs/dplyr_pipe.png)
 
 ---
 ## Piping in base R
@@ -2369,43 +2377,6 @@ untidy_counts %&gt;%
 ## 1497.67  822.33 1056.85  329.05
 ```
 
----
-## With tidy data - summarize sometimes
-
-Summary sometimes also works in this context
-
-``` r
-tidy_counts %&gt;%
-    group_by(Sample) %&gt;%
-    summarize(mean_counts = mean(counts))
-```
-
-```
-## # A tibble: 4 × 2
-##   Sample  mean_counts
-##   &lt;chr&gt;         &lt;dbl&gt;
-## 1 CD34_1        1498.
-## 2 CD34_2        1057.
-## 3 ORTHO_1        822.
-## 4 ORTHO_2        329.
-```
-
----
-## With tidy data - the purrr way
-
-This is an alternative method for doing this with an tidied frame
-
-
-``` r
-tidy_counts %&gt;%
-    split(.$Sample) %&gt;%
-    map_dbl(~mean(.$counts))
-```
-
-```
-##  CD34_1  CD34_2 ORTHO_1 ORTHO_2 
-## 1497.67 1056.85  822.33  329.05
-```
 
 ---
 ## purrr::pmap for multiple inputs
@@ -2785,6 +2756,7 @@ data &lt;- vroom(files)
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
+
 ---
 ## Why not always vroom?
 
