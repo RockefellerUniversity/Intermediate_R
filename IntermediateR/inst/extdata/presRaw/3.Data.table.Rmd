@@ -163,6 +163,10 @@ a <- names(expressed_norm)
 write.table(a,"test2.txt")
 ```
 
+```{r,eval=T, echo=F, warning=F, message=F}
+setDT(expressed_norm)
+```
+
 ```{r, subset5}
 
 expressed_norm[, CellType]
