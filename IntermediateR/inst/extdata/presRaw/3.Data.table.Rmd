@@ -122,7 +122,7 @@ Indexing data.tables works in a similar way to data.frames using the square brac
 expressed_norm[1,1]
 ```
 
-```{r}
+```{r,index}
 expressed_norm[1,]
 ```
 
@@ -156,7 +156,14 @@ expressed_norm$ENTREZ
 
 Lastly we can use the names. Similar to the tidyverse, data.table is aware of the column names and can interpret provided values. This means we do not have to be provided them as characters. Also, we can use tab-complete for completing these names. 
 
-```{r, subset5, eval=F}
+```{r}
+a <- class(expressed_norm)
+write.table(a,"test.txt")
+a <- names(expressed_norm)
+write.table(a,"test2.txt")
+```
+
+```{r, subset5}
 
 expressed_norm[, CellType]
 
@@ -167,7 +174,7 @@ expressed_norm[, CellType]
 
 Providing the column name as it is will gives back a vector. If we want a data.table we must give our column names as a list. 
 
-```{r}
+```{r, subset6}
 expressed_norm[, list(CellType )]
 ```
 
@@ -176,7 +183,7 @@ expressed_norm[, list(CellType )]
 
 As we have mentioned data.table does some interpretation of the inputs, allowing for more complex and concise operations. One of these is additional data.table specific nomenclature. One of these is the period *.()* can be used as an alias for *list()*.
 
-```{r}
+```{r, subset7}
 expressed_norm[, .(CellType)]
 
 ```
