@@ -11,11 +11,6 @@ params:
   toMessage: false    
 ---
 
-```{r, setup,include=FALSE}
-toMessage <- ifelse(!is.null(params$toMessage),params$toMessage,FALSE)
-message(toMessage)
-```
-
 <p>&nbsp;</p>
 These exercises cover the sections of [tidyverse session](https://rockefelleruniversity.github.io/Intermediate_R/). 
 
