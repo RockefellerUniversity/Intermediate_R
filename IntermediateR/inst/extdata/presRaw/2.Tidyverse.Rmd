@@ -1,5 +1,5 @@
 ---
-title: "My Course Template, Session 2"
+title: "Intermediate R, Session 2"
 subtitle: " <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html> Bioinformatics Resource Center - Rockefeller University"
 author: 
   - "http://rockefelleruniversity.github.io/RU_course_template/"
@@ -26,12 +26,436 @@ params:
 
 ```{r setup, include=FALSE}
 suppressPackageStartupMessages(require(knitr))
+suppressPackageStartupMessages(require(org.Hs.eg.db))
+suppressPackageStartupMessages(require(TxDb.Hsapiens.UCSC.hg38.knownGene))
+
 knitr::opts_chunk$set(echo = TRUE, tidy = T)
 ```
 
+
 ```{r, results='asis',include=TRUE,echo=FALSE}
 if(params$isSlides != "yes"){
-  cat("# ?? name of course?? (part 2)
+  cat("# Intermediate R (part 2)
+
+---
+"    
+  )
+  
+}
+
+```
+
+## Plan
+
+- [Getting started with tidy](https://rockefelleruniversity.github.io/Intermediate_R/r_course/presentations/singlepage/Intermediate_R_Session1.html#data-wrangling-with-the-tidyverse)
+- [Reading with readr]()
+- [Manipulating data with dplyr]()
+- [Miscellaneous tools for tidying data with tibble and tidyr]()
+- [Data clean up and string operations with stringr](https://rockefelleruniversity.github.io/Intermediate_R/r_course/presentations/singlepage/Intermediate_R_Session1.html#stringr)
+- [Vecotrized iterations with purrr]()
+- [Working with factors with forcats]() 
+
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides != "yes"){
+  cat("# Making R easier with Tidyverse
+
+---
+"    
+  )
+  
+}
+
+```
+
+## Data wrangling with the Tidyverse
+
+<b>There are some problems we face often when dealing with data.</b>
+
+<ul>
+  <li>Every dataset is different. Sometimes very different.</li>
+  <li>There are many ways to do things. Everyone has their favorite syntax.</li>
+</ul>
+
+<b>The issue:</b>
+Many fundamental data processing functions exist in <i>Base R</i> and beyond. Sometimes they can be inconsistent or unnecessarily complex. Especially when dealing with non-standard dataframes. The result is code that is confusing and doesn't flow i.e. nested functions
+
+---
+## What does it mean to be tidy?
+
+Tidyverse is most importantly a philosophy for data analysis that more often then not makes wrangling data easier. The tidyverse community have built what they describe as an <i>opinionated</i> group of packages. These packages readily talk to one another. 
+
+<ul>
+  <li>More efficient code</li>
+  <li>Easier to remember syntax</li>
+  <li>Easier to read syntax</li>
+</ul>
+
+You can read their <a href="https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html">manifesto</a> to get a better understanding of the tidy ethos. 
+  
+---
+## What does it <i>actually</i> mean to be tidy?
+
+<ul>
+  <li>A defined vision for coding style in R  
+  <li>A defined vision for data formats in R
+  <li>A defined vision for package design in R
+  <li>Unified set of community pushing in a cohesive direction
+  <li>Critical mass of people to influence the way the whole R community evolves
+</ul>
+
+---
+## What are the main tidy tools?
+
+<ul>
+  <li>ggplot2 – making pretty graphs 
+  <li>readr – reading data into R  
+  <li>dplyr – manipulating data  
+  <li>tibble - working with tibbles  
+  <li>tidyr – miscellaneous tools for tidying data
+  <li>purrr - iterating over data  
+  <li>stringr – working with strings  
+  <li>forcats - working with factors  
+</ul>
+
+Other tools have now been made by the Tidy community. This community also overlaps with Bioconductor. But the packages above are the linchpins that hold it together. 
+
+---
+## What we will be doing today
+
+We will touch on the core utilities of most of these packages, and show some of their most useful functions.  
+
+
+---
+## What we won't be doing today
+
+We have a seperate course that covers plotting with [ggplot](https://rockefelleruniversity.github.io/Plotting_In_R/). That said we will show you how easily it integrates with Tidyverse. 
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Setting Up
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Setting Up
+
+---
+"    
+  )
+  
+}
+
+```
+
+## Set Up
+
+All prerequisites, links to material and slides for this course can be found on github.
+
+* [Intermediate R](https://rockefelleruniversity.github.io/Intermediate_R/)
+
+Or can be downloaded as a zip archive from here.
+
+* [Download zip](https://github.com/rockefelleruniversity/Intermediate_R/zipball/master)
+
+---
+## Course content
+
+Once the zip file is unarchived. All presentations as HTML slides and pages, their R code and HTML practical sheets will be available in the directories underneath.
+
+* **presentations/slides/**
+Presentations as an HTML slide show.
+* **presentations/singlepage/** 
+Presentations as an HTML single page.
+* **presentations/r_code/**
+R code in presentations.
+* **exercises/**
+Practicals as HTML pages. 
+* **answers/**
+Practicals with answers as HTML pages and R code solutions. 
+
+---
+## Set the Working directory
+
+Before running any of the code in the practicals or slides we need to set the working directory to the folder we unarchived. 
+
+You may navigate to the unarchived Intermediate_R folder in the Rstudio menu.
+
+**Session -> Set Working Directory -> Choose Directory**
+
+or in the console.
+
+```{r setwd_Intermediate_R,eval=F} 
+setwd("~/Downloads/Intermediate_R/r_course")
+
+```
+
+---
+## Lets get tidy!
+
+First step lets load in the data we are using today. This Rdata object will load in a few different data frames. 
+
+```{r}
+
+load(file='data/my_tidy.Rdata')
+```
+
+---
+## Are all data frames equal?
+
+```{r}
+head(df1)
+```
+
+```{r}
+head(df2)
+```
+
+---
+## Are all data frames equal?
+
+```{r}
+head(df3a)
+```
+
+```{r}
+head(df3b)
+```
+
+---
+## What is a tidy dataset?
+
+A tidy dataset is a data frame (or table) for which the following are true:
+
+* Each variable has its own column
+* Each observation has its own row
+* Each value has its own cell
+
+***Which of our dataframes is tidy?***
+--
+<p>&nbsp;</p>
+Our first dataframe is tidy
+
+---
+## Why bother?
+
+Consistent dataframe layouts help to ensure that all values are present and that relationships between data points are clear.
+
+R is a vectorized programming language. R builds data frames from vectors, and R works best when its operation are vectorized.
+
+Tidy data utilizes both these aspects of R.  
+=> Precise and Fast
+
+---
+## Lets load in the tidyverse
+
+To get started all we have to do is load in the core tidyverse packages, with a library call to tidyverse. 
+
+```{r}
+library(tidyverse)
+```
+
+---
+## Other library calls
+
+If you just need one of the packages you can also load the packages individually. 
+
+```{r}
+library(readr)
+```
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Reading and Tibbles
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Reading and Tibbles
+
+---
+"    
+  )
+  
+}
+
+```
+
+## readr: Reading data into R
+
+Now that we have our packages loaded in we now need some data. Lets start from the beginning by reading in some data.
+
+
+---
+## Reading in with base
+
+We can use several functions to read files in using base R like read.csv, read.table, read.delim etc. These have overlapping uses that are context dependent. 
+
+When you read data in with base, it goes into a regular dataframe. When you return the dataframe through typing it in the console it will just print the whole dataframe.
+
+```{r}
+untidy_counts_base <- read.csv("data/hemato_rnaseq_counts.csv")
+
+untidy_counts_base
+```
+
+---
+## Reading in with readr
+
+As with base There are several functions to read in data. One quick note is that you will see many analogous function names to base, but typically in tidyverse they use a *_* instead of *.* i.e. read_csv() instead of read.csv().
+
+readr:
+
+* read_csv(): comma separated (CSV) files  
+* read_tsv(): tab separated files  
+* read_delim(): general delimited files  
+* read_table(): tabular files where columns are separated by white-space  
+* read_lines(): reads a certain number of lines
+* read_csv_chunked(): read csv files, but do it in chunks (for very large files)
+
+---
+## Reading in with readr
+
+When you use readr to read in your data, you instead get a special dataframe called a tibble. Tibbles have several properties that make them more user friendly i.e. When you return the tibble through typing it in the console it will print a preview, with some information about dimensions and data types. 
+
+```{r}
+
+read_csv("data/hemato_rnaseq_counts.csv")
+
+```
+
+---
+## Reading in with readr
+
+Tibbles carry and display extra information. While reading in it is easy to specify data type. 
+
+```{r}
+untidy_counts <- read_csv("data/hemato_rnaseq_counts.csv", col_types = cols(
+    ENTREZ = col_character(),
+    CD34_1 = col_integer(),
+    ORTHO_1 = col_integer(),
+    CD34_2 = col_integer(),
+    ORTHO_2 = col_integer()
+  ))
+
+untidy_counts
+```
+
+## Subsetting to make tibbles
+
+You can use the same methods as base R to interact with tibbles to subset them.
+
+```{r}
+untidy_counts[1,]
+```
+
+```{r}
+untidy_counts[,1]
+```
+
+---
+## Subsetting to make tibbles
+
+Tibbles are column-oriented, so if you don't specify row/column with a comma, it will assume you want a column. 
+
+```{r}
+
+untidy_counts[1]
+```
+
+---
+## Subsetting to make vectors
+
+The outputs thus far have produced more tibbles. Sometimes we just want a vector. Like lists, we can use double brackets. Again this will give the first column.
+
+```{r}
+untidy_counts[[1]]
+```
+
+---
+## Subsetting to make vectors
+
+Also, like lists and regular data frames we can use a dollar sign with the column name.
+```{r}
+untidy_counts$ENTREZ
+```
+
+---
+## Tibbles: Converting to tibble
+
+There are coercion functions similar to base to convert a regular dataframe to a tibble. 
+```{r}
+
+as_tibble(untidy_counts_base)
+```
+
+---
+## Tibbles: Converting from tibble
+
+Some tools are not tibble friendly. Calling as.data.frame is sufficient to convert it back to a base data frame
+
+```{r}
+
+untidy_counts_df <- as.data.frame(untidy_counts)
+head(untidy_counts_df)
+```
+
+---
+## Tibbles: Make your own
+
+We can also make our own tibble now from scratch. Lets use some genome metadata. We are accessing some Bioconductor databases that contain annotation information for genes. 
+
+First we grab the position of genes. Then we use the IDs to get gene symbols. For more info on what we are doing check out our Bioconductor course [here](https://rockefelleruniversity.github.io/Bioconductor_Introduction/presentations/singlepage/GenomicFeatures_In_Bioconductor.html#Extracting_Genomic_Locations)
+
+```{r}
+# Lets load in some packages
+library(org.Hs.eg.db)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+
+hg38_genes <- genes(TxDb.Hsapiens.UCSC.hg38.knownGene)
+
+keys <- hg38_genes$gene_id
+
+symbols <- AnnotationDbi::select(org.Hs.eg.db, keys = keys, columns = c("SYMBOL"), keytype = "ENTREZID")
+
+```
+---
+## Tibbles: Make your own
+
+Now we will put all the metadata together into a tibble. 
+```{r}
+
+counts_metadata <- tibble(ID = symbols$ENTREZID, SYMBOL = symbols$SYMBOL, LENGTH = lengths(hg38_genes))
+
+counts_metadata
+```
+
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Tidying up your data
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Tidying up your data
 
 ---
 "    
@@ -42,31 +466,1111 @@ if(params$isSlides != "yes"){
 ```
 
 
-##  Recap
+## Tidying data up
 
-?? can add a recap to link to keypoints in first session??
-Session 1 covered introduction to R data types and import/export of data.
+Now we know how to read data in weill want to tidy it. What is wrong with the count dataframe from a tidy viewpoint?  
 
-- [Background to R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#background-to-r)
-- [Data types in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#data_types_in_r)
-- [Reading and writing in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#reading-and-writing-data-in-r)
+_Remember_. These are the rules:
+
+* Each variable has its own column
+* Each observation has its own row
+* Each value has its own cell
+
+```{r}
+untidy_counts
+```
+
+---
+## Tidying data up
+
+What is wrong with the count dataframe from a tidy viewpoint?  
+
+_Remember_, these are the rules:
+
+* Each variable has its own column
+* Each observation has its own row
+* Each value has its own cell
+
+__A single variable with multiple columns__
+
+```{r}
+untidy_counts
+```
+
+---
+## Reshape data with pivot_longer and pivot_wider
+
+In this case we have multiple samples as columns. Though this is intuitive for some analyses and plotting, often this is not what we want and it is untidy. When all the data is in the wrong orientation, tidyr has some tools to move the data around quickly and easily:  
+
+__pivot_longer and pivot_wider__
+
+```{r, echo=F}
+tidier_counts <- pivot_longer(untidy_counts, names_to = "Sample", values_to = "counts", cols = c(-ENTREZ))
+tidier_counts
+```
+
+---
+## tidyr::pivot_longer
+
+In this case, pivot_longer creates new columns Sample and Counts. Sample is made from the column names hence *names_to*. While Counts is made from the values within the columns hence *values_to*. We are also specifying that we are tidying all columns apart from ENTREZ with the cols argument. 
+
+**This replaced a function called gather**
+```{r}
+
+tidier_counts <- pivot_longer(untidy_counts, names_to = "Sample", values_to = "counts", cols = c(-ENTREZ))
+tidier_counts
+
+```
+
+---
+## tidyr::pivot_wider
+pivot_wider allows you to go in the opposite direction to pivot_longer. We can spread single variables over multiple columns. Intuitively we use the arguments: *names_from* and *values_from*, to determine which columns we are getting arguments from. 
+
+**This replaced a function called spread**
+```{r}
+pivot_wider(tidier_counts, names_from = c(Sample), values_from = counts)
+```
+
+---
+## What is next to tidy?
+
+_Remember_, these are the rules:
+
+* Each variable has its own column
+* Each observation has its own row
+* Each value has its own cell
+
+```{r}
+tidier_counts
+```
+
+---
+## What is next to tidy?
+
+_Remember_, these are the rules:
+
+* Each variable has its own column
+* Each observation has its own row
+* Each value has its own cell
+
+__Multiple variables in a single column__
+
+```{r}
+tidier_counts
+```
+
+---
+## Splitting and combining varaibles
+
+When there are several variables crammed into a single column, tidyr can be used to split single values into several:  
+
+__separate__
+
+---
+## tidyr::separate
+Separate allows you to break a strings in a variable by a separator. In this case the cell type and replicate number are broken by underscore.
+
+**There are also the newer functions: separate_wider_delim(), separate_wider_position(), separate_wider_regex()**
+
+```{r}
+tidy_counts <- separate(tidier_counts, Sample, sep = "_", into=c("CellType", "Rep"), remove=TRUE)
+tidy_counts
+```
+
+---
+## tidyr::unite
+Unite can go the other way. The *remove* argument controls whether the arguments that are being united are also dropped in the new object. This is especially useful if you want to combine variables to make a specific sample ID.
+
+```{r}
+unite(tidy_counts, Sample, CellType, Rep, remove=FALSE)
+```
 
 
 ---
-## Same stuff
-??More content for second session??
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Piping with Magrittr
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
 
 ---
-## Time for an exercise!
-
-
-Exercise on functions can be found [here](../..//exercises/exercises/MyExercise3_exercise.html)
+"    
+  )
+}else{
+  cat("# Piping with Magrittr
 
 ---
-## Answers to exercise.
+"    
+  )
+  
+}
+
+```
+
+## Simplifying code
+
+Often when getting started code can get a little out of control and confusing. As additional steps are added code can become nested. For example here we tidy our data in a single complicated expression 
+
+```{r}
+tidy_counts <- separate(pivot_longer(untidy_counts, names_to = "Sample", values_to = "counts", cols = c(-ENTREZ)), Sample, sep = "_", into = c("CellType","Rep"), remove=FALSE)
+```
+
+We simplified things by saving each step as an intermediate. This is not very efficient as your memory will fill up.
+
+```{r}
+tidier_counts <- pivot_longer(untidy_counts, names_to = "Sample", values_to = "counts", cols = c(-ENTREZ))
+tidy_counts <- separate(tidier_counts, Sample, sep = "_", into = c("CellType","Rep"), remove=FALSE)
+
+```
 
 
-Answers can be found here  [here](../..//exercises/answers/MyExercise3_answers.html)
+---
+## Piping to string functions together
 
-Rcode for answers can be found here  [here](../..//exercises/answers//answers/MyExercise3_Answers.R)
+Piping allows you to pass the result from one expression directly into another. This is a common operation used across computational languages that strings together expressions so you do not need to save any transient files. Piping is integral to tidyverse.
+
+How does this work with R? We follow a specific logical flow:
+
+![dplyr](./imgs/dplyr_pipe2.png)
+
+---
+## Piping in base R
+
+R added native in-built piping options in 2021 using **|>**. 
+
+This way there are no intermediates and the steps in your data analysis are logical and clear unlike nested code.
+
+```{r}
+
+tidy_counts <- untidy_counts |> # start with untidy counts
+  pivot_longer(cols= 2:5,  names_to ="Sample", values_to = "counts") |> # pivot tibble to a single count column
+  separate(Sample, sep = "_", into = c("CellType","Rep"), remove=FALSE) # split metadata
+tidy_counts
+```
+
+---
+## Piping in tidy
+
+The magrittR package developed the %>% pipe as part of Tidyverse. This pipe is loaded in with the tidyverse. On it's face value the tidyverse pipe works in a similar way to the base pipe. 
+
+```{r}
+
+tidy_counts <- untidy_counts %>% 
+  gather(key=Sample, value=counts, -ENTREZ) %>% 
+  separate(Sample, sep = "_", into = c("CellType","Rep"), remove=FALSE)
+tidy_counts
+```
+
+---
+## Advanced Piping
+
+Often the tidyverse pipe is more popular. The magrittR package developed the %>% pipe as part of Tidyverse prior to the base R. The RStudio shortcut Ctrl+Shift+M also insets the tidyverse pipe by default (though you can change this). That said it is also more flexible.
+
+---
+## Piping and placeholders
+
+A period ( . ) can be used as placeholders to represent the object being piped in. 
+In this case we use the period to in a logical expression, which we then use to subset itself. 
+
+```{r}
+
+tidier_counts %>% .[.$counts > 0,]
+
+```
+
+---
+## Piping and in-place assignment
+
+%<>% is a modification of the pipe. This is a two way pipe that will carry the variable forward, and once expression is resolved, the result then gets assigned back to the original variable. To use this you have to actually load the actual magrittr package in to your work space. 
+
+```{r}
+library(magrittr)
+tidier_counts %<>% .[.$counts > 0,]
+tidier_counts
+```
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Quickly manipulate data with dplyr
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Quickly manipulate data with dplyr
+---
+"    
+  )
+  
+}
+
+```
+
+
+## dplyr
+
+Now we know how to tidy data and some core aspects of coding in a tidyverse way, we want to start unleashing the power of using tidyverse for data manipulation. The dplyr package is one of the main workhorses in the tidyverse. This package contains a variety of tools to access and manipulate dataframes.  
+
+dplyr makes it easy to merge, subset and summarize data sets quickly. 
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Joining tibbles together
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Joining tibbles together
+
+---
+"    
+  )
+  
+}
+
+```
+
+## Joining
+
+Often you have two dataframes and you want to join them together. Data frames can be joined on a shared variable _a.k.a._ a key. We want this key to be unique i.e. ENTREZ ID. 
+
+---
+## Merging dataframes
+
+Lets start by merging two data frames. Our first input will be our count data.
+
+```{r}
+tidy_counts
+```
+
+---
+## Merging dataframes
+The second data frame is some additional information associated with each gene. 
+
+```{r}
+counts_metadata
+```
+
+---
+## dplyr::inner_join
+
+We can use the *inner_join* function from the dplyr package to merge these data frames.
+
+```{r}
+tidy_counts_meta <- inner_join(tidy_counts, counts_metadata, by = c("ENTREZ" = "ID"))
+```
+
+---
+## There are many ways to join things
+
+Inner Join 
+
+* Keeps all observations in x and y with matching keys
+
+Outer Join
+
+* A left join keeps all observations in x and those in y with matching keys.
+* A right join keeps all observations in y and those in x with matching keys. 
+* A full join keeps all observations in x and y
+
+
+---
+## dplyr::left_join 
+My tidy_counts tibble is the on the left, so is the backbone for this join. This will only then show the metadata that has a matching key i.e. ENTREZID. 
+```{r}
+left_join(tidy_counts, counts_metadata, by = c("ENTREZ" = "ID"))
+```
+
+---
+## dplyr::right_join
+Now the counts_metadata tibble is the backbone for this join. Many of the keys (i.e. ENTREZID) in this tibble do not have matches in the tidy_counts_tibble. Anything without a match is filled in with NA. 
+```{r}
+tidy_counts_expressed <- right_join(tidy_counts, counts_metadata, by = c("ENTREZ" = "ID"))
+tidy_counts_expressed %>% tail()
+```
+
+---
+## Join vs. Merge
+
+It is possible to do this using in base R using the *merge()* function. The various joins are achieved by controlling specific arguments with this function. 
+
+The use of explicit join functions in tidyverse makes data workflows much clearer and readable. 
+
+More complex joining operations are also easier to achieve such as filtering joins. 
+
+---
+## Filtering joins
+
+Filtering joins 
+
+* A semi join only keeps all observations in x that are matched in y. y isn't returned. 
+* A anti join only keeps all observations in x that are _not_ matched in y. y isn't returned. 
+
+---
+## dplyr::semi_join
+Semi join only keeps observations in x that are matched in y. y is only used as a reference and is not in output
+```{r}
+semi_join(counts_metadata, tidy_counts, by = c("ID" = "ENTREZ") )
+```
+
+---
+## dplyr::anti_join
+Anti join only keeps observations in x that are not matched in y. y is only used as a reference and is not in output
+```{r}
+
+anti_join(counts_metadata, tidy_counts, by = c("ID" = "ENTREZ") )
+
+```
+
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Filtering, Summarizing and Modifying
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Filtering, Summarizing and Modifying
+---
+"    
+  )
+  
+}
+
+```
+
+
+## dplyr
+This package contains a variety of tools to access and manipulate dataframes.  
+
+They have a common rationale:
+
+![dplyr](./imgs/dplyr.png)
+
+---
+## dplyr::select
+**select** allows you to work with the columns in your tibble. 
+At its most basic **select** allows you to make a vector from a specific variable.
+
+*NOTE: We are directly pointing to the select function within dplyr by using two semi-colons. We have to do this if we have multiple packages loaded in with the same name. This is really common with the select function as it is quite a generic name.*
+
+```{r}
+dplyr::select(tidy_counts_meta, counts)
+```
+
+---
+## dplyr::select
+**select** allows you to make a dataframe from several variables
+```{r}
+dplyr::select(tidy_counts_meta, counts, ENTREZ)
+```
+
+---
+## dplyr::select
+**select** allows you to make a dataframe excluding a variable
+```{r}
+dplyr::select(tidy_counts_meta, -Sample)
+```
+
+---
+## dplyr::select
+**select** allows you to make a dataframe from a range of variables
+```{r}
+dplyr::select(tidy_counts_meta, CellType:SYMBOL)
+```
+
+---
+## dplyr::filter
+
+**filter** allows you to work with the rows in your tibble. This is my most commonly used dplyr function. Through __filter__ you can access observations based on criteria that produces a logical.
+
+```{r}
+filter(tidy_counts_meta, Sample == 'CD34_1')
+```
+
+---
+## dplyr::filter
+Here we use __filter__ to access observations based on several criteria.
+
+```{r}
+filter(tidy_counts_meta, Sample %in% c('CD34_1', 'ORTHO_1'))
+```
+
+---
+## dplyr::filter
+
+Similarly we can use __filter__ to access observations based on numerical operators
+```{r}
+filter(tidy_counts_meta, counts > 0)
+```
+
+
+---
+## dplyr::arrange
+
+_arrange_ sorts the dataframe based on a specific variable, in ascending order. 
+```{r}
+arrange(tidy_counts_meta, counts)
+```
+
+---
+## dplyr::arrange
+_arrange_ can sort based on multiple variables using the order provided. We can also use the desc() function to change the order to descending.  
+```{r}
+
+arrange(tidy_counts_meta, CellType, desc(counts))
+```
+
+---
+## dplyr::mutate
+_mutate_ creates a new column based on some form of computation. Here we are adding a z-score for the counts. 
+```{r}
+mutate(tidy_counts_meta, scale(counts))
+```
+
+---
+## dplyr::mutate
+_mutate_  can be used to create a named variable in much the same way. 
+```{r}
+mutate(tidy_counts_meta, count_zscore = scale(counts))
+```
+
+
+---
+## dplyr::mutate and across
+When we run mutate, we can use the across() function to do a in-place update of a column. In this case we will turn the column CellType into a factor.
+
+```{r}
+
+tidy_counts_meta %>% mutate(across(CellType, factor))
+
+```
+
+---
+## dplyr::summarize
+_Summarize_ applies aggregating or summary function to a group i.e. counting. Lets see how many genes we have no counts for in each sample. First we will generate a table of genes with no counts. 
+
+```{r}
+filter(tidy_counts_meta, counts == 0)
+```
+
+---
+## dplyr::summarize
+Now we have some data to play with, we do the first key step in summarization: group_by. This adds the *Group* property. When we summarize it will be within these groups i.e. in this case its within Sample. 
+
+```{r}
+filter(tidy_counts_meta, counts == 0) %>%
+  group_by(Sample) 
+```
+
+---
+## dplyr::summarize
+Once the tibble has group information we can then summarize over the these groups. We can use the *n()* function to count how many observations there are for each member of our group, Samples.
+
+```{r}
+filter(tidy_counts_expressed, counts == 0) %>%
+  group_by(Sample) %>%
+  summarise(n())
+```
+
+---
+## dplyr::summarize
+We can use _summarize_ to apply more complex aggregating or summary functions i.e. mean. In this case we will calculate the mean gene counts across conditions. 
+```{r}
+tidy_counts_meta %>%
+  group_by(ENTREZ) %>%
+  summarise(counts_mean = mean(counts))
+```
+
+---
+## dplyr::summarize
+We can use also use multiple groups, for *group_by*. We can use this to generate a more useful mean; the mean counts in genes per CellType. 
+```{r}
+tidy_counts %>%
+  group_by(ENTREZ, CellType) %>%
+  summarise(counts_mean = mean(counts))
+```
+
+---
+## dplyr::group_by
+_grouping_ can also be used to help filter within groups. Here we use order to get the genes with the top 3 amount of counts.
+```{r}
+tidy_counts_meta %>%
+  group_by(Sample) %>%
+  filter(order(counts, decreasing=T) <= 3)
+```
+
+---
+## dplyr::group_by
+We can stitch this together to do more complicated operations. In this case I am filtering to observations without 0 counts. I then am grouping by CellType and ENTREZ.
+```{r}
+tidy_counts_meta %>% 
+  filter(counts != 0) %>% 
+  group_by(CellType, ENTREZ)
+```
+
+---
+## dplyr::group_by
+
+Now that they are grouped by CellType and ENTREZ, we can filter for all genes that have counts greater than 0, in both replicates.
+```{r}
+tidy_counts_meta %>% 
+  filter(counts != 0) %>% 
+  group_by(CellType, ENTREZ) %>%  
+  filter(n()>1)
+```
+
+---
+## Piping and plots
+
+By now it is clear how useful pipes can be, to stitch together the different operations. These pipes can go straight into plots. Here we make a simple X-Y plot to compare counts in our cell types. 
+
+```{r}
+p <- tidy_counts_meta %>%
+  group_by(ENTREZ, CellType) %>%
+  summarise(counts_mean = mean(counts)) %>% 
+  pivot_wider(names_from=CellType, values_from=counts_mean) %>%
+  ggplot(aes(x=CD34, y=ORTHO)) + geom_point()
+
+```
+
+---
+## Piping and plots
+
+By now it is clear how useful pipes can be, to stitch together the different operations. These pipes can go straight into plots. Here we make a simple X-Y plot to compare counts in our cell types. 
+
+```{r}
+p 
+
+```
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Outputting your tidy data
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Outputting your tidy data
+---
+"    
+  )
+  
+}
+
+```
+
+
+## Readr again: Writing out 
+
+You've made a lovely new tibble file. Now you need to save it somewhere. There are a wide range of writing options. We can specify the delmiter directly or use a specific function
+
+```{r}
+
+write_delim(tidy_counts_meta, 'data/counts_with_metadata.csv', delim =',')
+
+write_csv(tidy_counts_meta, 'data/counts_with_metadata.csv')
+```
+
+A key difference compared to base is that it does not write out row names. Tibbles generally don't have rownames.
+
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Pattern matching with strings
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Pattern matching with strings
+---
+"    
+  )
+  
+}
+
+```
+
+## stringr
+
+If the data you are working with involves characters from data entry often there will be errors i.e. clinical study metadata or a hand-typed list of genes of interest. Tidying data also means fixing these problems. stringr helps make this easy. 
+
+* Access and manipulate characters
+* Deal with whitespace
+* Pattern Recognition
+
+Though stringr is pretty comprehensive and covers most of what you will need, there is a sister package called stringi with even more functionality. 
+
+---
+## stringr::strsub
+Many overlapping functions with base for combining, subsetting, converting and finding strings.
+
+Extract substrings from a range. Here the 1st to 3rd character.
+```{r}
+
+brc <- c("Tom", "Jenelys", "Matthew", "Wei", "Doug")
+
+
+brc %>% str_sub(1, 3)
+```
+
+Extract substrings from a range. Here the 2nd to 2nd to last character
+```{r}
+brc %>% str_sub(2, -2)
+```
+
+---
+## stringr::strsub
+Many overlapping functions with base for combining, subsetting, converting and finding strings.
+
+
+Assign values back to substrings. Here the 2nd to 2nd to last character is replaced with X.
+```{r}
+
+str_sub(brc, 2, -2) <- 'X'
+brc
+```
+
+---
+
+## Replacing Strings
+It is easy to replace specific strings with *str_replace_all*.
+```{r}
+str_replace_all(brc, 'Matthew', 'Matt')
+str_replace_all(brc, 'u', 'z' )
+```
+
+
+---
+## Stripping whitespace
+
+Whitespace is often an issue for consistent metadata. WE can use the *str_replace_all* function to remove whitespace. 
+```{r}
+brc2 <- c("Tom  ", "  Je  nelys", "Matt   ", "Wei", "D o u g")
+
+str_replace_all(brc2, ' ','' )
+```
+
+Rather then replacing all whitespace, you can trim trailing and leading whitespace from strings. 
+
+```{r}
+str_trim(brc2)
+
+```
+
+
+Can add whitespace to strings to get consistent length. Here all are 10 characters
+```{r}
+
+str_pad(brc2, width=10, side='left')
+```
+
+---
+## stringr::str\_to\_* - Capitalization
+Often when manipulating strings we will also need to alter the capitalization. A common case is if we want to do a quick and easy conversion between gene symbol nomenclature. 
+```{r}
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>%
+  head()
+
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>% 
+  str_to_title() %>% 
+  head()
+```
+
+---
+## stringr::str\_to\_* - Capitalization 
+String manipulation can be used with tibbles and mutate.
+
+```{r}
+tidy_counts_meta %>% 
+  mutate(SYMBOL2 = str_to_title(SYMBOL))
+```
+---
+## stringr::str\_to\_* - Capitalization
+We can convert back to capitals, just as easy.
+```{r}
+
+tidy_counts_meta %>% 
+  mutate(SYMBOL2 = str_to_title(SYMBOL)) %>% 
+  mutate(SYMBOL3 = str_to_upper(SYMBOL2))
+```
+
+---
+## Finding patterns with stringr
+ 
+Find patterns in different ways. *str_detect* gives a T/F whether the pattern 'GAP' is present in vector.
+```{r}
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>% 
+  str_detect('GAP') %>% head()
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>% 
+  str_detect('GAP') %>%
+  filter(tidy_counts_meta, .)
+```
+
+---
+## Finding patterns with stringr
+
+*str_subset* is similar to detect, but it returns the match itself.
+
+```{r}
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>% 
+  str_subset('GAP')
+
+```
+
+---
+## Finding patterns with stringr
+
+Count gives you the total number of times your pattern appears in each character in the vector.
+
+```{r}
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>% 
+  str_count('GAP') %>% .[1:100]
+
+tidy_counts_meta %>% 
+  pull(SYMBOL) %>% 
+  str_count('A') %>% .[1:100]
+```
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Functional programming with purrr
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Functional programming with purrr
+---
+"    
+  )
+  
+}
+
+```
+
+
+## purrr - Functional programming 
+
+* Applying functions to datasets  
+* Base people use _for_ loops or apply  
+* Big advantage is that purrr readily handles nested dataframes and has standard outputs
+
+---
+## purrr::map - tidy way to iterate
+
+Map is the tidy equivalent to apply. Here we take our untidy counts, trim of IDs, and then calculate means for each column. By default the output is a list
+
+```{r}
+
+untidy_counts %>% 
+  dplyr::select(-ENTREZ) %>% 
+  map(mean)
+```
+
+---
+## purrr::map_dbl
+
+Same as the above line, but using map_dbl specifies the outputs is going to be a double.
+
+```{r}
+
+untidy_counts %>% 
+  dplyr::select(-ENTREZ) %>% 
+  map_dbl(mean)
+```
+
+---
+## With tidy data - summarize sometimes
+
+Summary sometimes also works in this context
+```{r}
+
+tidy_counts %>% 
+  group_by(Sample) %>% 
+  summarize(mean_counts = mean(counts))
+```
+
+---
+## With tidy data - the purrr way
+
+This is an alternative method for doing this with an tidied frame
+
+```{r}
+
+tidy_counts %>% 
+  split(.$Sample) %>% 
+  map_dbl(~mean(.$counts))
+```
+
+---
+## purrr::pmap for multiple inputs
+
+pmap is a map variant for dealing with multiple inputs. This can be used to apply a function on a row by row basis
+
+```{r}
+
+list(untidy_counts$ORTHO_1, untidy_counts$ORTHO_2) %>% 
+  pmap_dbl(mean)
+
+```
+
+---
+## Nest - Values can be much more
+
+Dataframes can be be simplified by making them more complex.  
+
+Each value within a tibble can contain more abstract information then just numbers and characters. Instead you can store another tibble, or object.
+
+---
+## tidyr::nest 
+
+Nest will leverage group information for the nesting the data by sample. 
+
+```{r}
+tidy_counts_expressed_norm <- read_csv("data/expressed_genes_output_norm.csv")
+
+tidy_counts_nest <- tidy_counts_expressed_norm %>% 
+  group_by(Sample) %>%
+  nest()
+
+tidy_counts_nest
+```
+
+---
+## tidyr::nest 
+
+Looking at tibble it is a new datatype that appears simplified.
+
+```{r]}
+tidy_counts_nest$data %>% is()
+```
+
+The data is still there, nested within one of the variables.
+```{r}
+
+tidy_counts_nest$data[[1]]
+```
+
+---
+## tidyr::nest and purrr::map
+
+Map can be used to apply functions across nested dataframes.
+Here we calculate a linear model. This is also saved in the tibble.
+
+```{r}
+
+tidy_counts_nest <- tidy_counts_nest %>% 
+  mutate(my_model = map(data, ~lm(CPM ~ TPM, data = .)))
+
+tidy_counts_nest
+
+tidy_counts_nest$my_model[[1]]
+```
+
+---
+## broom::tidy - making models legible 
+
+Tidy also has the ability to "tidy" up outputs from common statistical packages, using broom.
+
+```{r}
+
+library(broom)
+
+tidy_counts_nest <- tidy_counts_nest %>% 
+  mutate(my_tidy_model = map(my_model, broom::tidy))
+
+tidy_counts_nest
+```
+---
+## broom::tidy - making models legible 
+```{r}
+tidy_counts_nest$my_tidy_model[[1]]
+```
+
+---
+## dplyr::unnest
+
+Unnesting to get everything back into a dataframe is very straightforward
+```{r}
+
+tidy_counts_nest %>%
+  unnest(my_tidy_model)
+```
+
+---
+## dplyr::unnest 
+Unnesting can be done sequentially to keep adding to master dataframe
+
+```{r}
+
+tidy_counts_nest %>%
+  unnest(my_tidy_model) %>% 
+  unnest(data)
+
+```
+
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Reading data into R fast
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Reading data into R fast
+---
+"    
+  )
+  
+}
+
+```
+
+
+## vroom for fast reading
+
+We have introduced readr for reading and writing data in a tidyverse manner. Readr is not the only tool though: vroom is a tidy package that has been designed for working fast on large data.
+
+vroom is fast because it uses multi-threading and can read data lazily (it doesn’t fully load it into memory until you access it.)
+
+```{r}
+library(vroom)
+```
+
+---
+## vroom() to read
+
+Lets read in a large dataset. We will grab bulk RNAseq count data from [ENCODE](https://www.encodeproject.org/files/ENCFF754AUQ/). We just have to use the *vroom()* function. It will guess the delimiter and the column data types. 
+
+```{r}
+data <- vroom("https://www.encodeproject.org/files/ENCFF754AUQ/@@download/ENCFF754AUQ.tsv")
+data
+```
+
+
+---
+## vroom() to read
+
+As with readr we can specify the file type. This file has many columns, so lets just do the first 3. We can also specify the delimiter. 
+
+```{r}
+data <- vroom("https://www.encodeproject.org/files/ENCFF754AUQ/@@download/ENCFF754AUQ.tsv", delim = "\t", col_types = cols(
+    transcript_id = col_factor(),
+    gene_id = col_factor(),
+    length = col_integer()
+  ))
+
+```
+
+---
+## Column selection on read
+
+vroom has the ability to perform dplyr-like operations on read, reducing the memory load of working with large files. To do this we can use the *col_select* argument.  
+
+```{r}
+data <- vroom("https://www.encodeproject.org/files/ENCFF754AUQ/@@download/ENCFF754AUQ.tsv", col_select = c(gene_id, TPM, TPM_ci_lower_bound, TPM_ci_upper_bound))
+```
+
+---
+## Reading multiple files
+
+```{r}
+files <- dir("data",pattern="ortho|cd34", full.names = T)
+data <- vroom(files)
+
+
+```
+---
+## Why not always vroom?
+
+Vroom is great as it it so fast and has some cool methods like in built filtering or managing multiple files. 
+
+That said it can be overkill for tiny files. Lazy loading can also mean you are simply deferring the time cost until you actually interact with the data. 
+
+---
+## Tidy beyond this
+
+Hadley Wickham (Chief Scientist at RStudio) is the driving force behind the tidyverse. He is a good place to start at to get an idea of the future of tidy.   
+
+Hadley wrote a paper about why he thinks tidy data is best: www.jstatsoft.org/v59/i10/paper.  
+
+There is a lot of support for all things tidy at: https://www.tidyverse.org/  
+(This includes really great cheat sheets for each tool)
+
+---
+## Tidy packages to check out:
+
+lubridate and hms: Allow managing of calendar and time formats
+
+broom: helps tidy up standard base function i.e. lm or t.test
+
+tidymodels: A collection of tools for preparing for and validating model functions
+
+plyranges: dplyr equivalent for working with ranges i.e. Granges
+
+---
+## Other Good Resources
+
+* [Our ggplot2 course](https://rockefelleruniversity.github.io/Plotting_In_R/)
+* [R for Data Science text book](https://r4ds.had.co.nz/)
+* [Data Science with R text book](http://garrettgman.github.io/)
+
+
+
+
 

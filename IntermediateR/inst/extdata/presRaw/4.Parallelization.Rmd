@@ -56,6 +56,25 @@ Session 1 covered introduction to R data types and import/export of data.
 ## Same stuff
 ??More content for second session??
 
+
+
+* epxlain concept of threads and cores etc and running multiple processes on a tpyical laptop. what are limits?
+
+* dig into parallelization - can do general but also applied
+* could also do genreal sxcripting and building workflow i..e warnings, trycatch, debug
+
+* options include:
+- parallel
+- futures
+- furrr
+- BiocParallel
+- touch on specifics of slurm
+
+
+
+
+
+
 ---
 ## Time for an exercise!
 

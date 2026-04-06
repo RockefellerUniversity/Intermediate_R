@@ -1,8 +1,8 @@
 ---
-title: "My Course Template, Session 1"
+title: "Intermediate R, Session 1"
 subtitle: " <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html> Bioinformatics Resource Center - Rockefeller University"
 author: 
-  - "http://rockefelleruniversity.github.io/RU_course_template/"
+  - "http://rockefelleruniversity.github.io/Intermediate_R/"
   - "brc@rockefeller.edu"
 output: 
   xaringan::moon_reader:
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE, tidy = T)
 
 ```{r, results='asis',include=TRUE,echo=FALSE}
 if(params$isSlides != "yes"){
-  cat("# ???My Course name (session1)???
+  cat("# Intermediate R
 
 ---
 "    
@@ -43,19 +43,17 @@ if(params$isSlides != "yes"){
 
 ## Overview
 
-??We often put an overview slide that links to the various parts of the course content to make it easy to navigate i.e. this one for intro to r??
-
-- [Set up](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#set-up)
-- [Background to R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#background-to-r)
-- [Data types in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#data_types_in_r)
-- [Reading and writing in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#reading-and-writing-data-in-r)
+- [Intro](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#set-up)
+- [Tidyverse](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#background-to-r)
+- [Data.table](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#data_types_in_r)
+- [Parallelization](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#reading-and-writing-data-in-r)
 
 ---
 ```{r, results='asis',include=TRUE,echo=FALSE}
 if(params$isSlides == "yes"){
   cat("class: inverse, center, middle
 
-# Set Up
+# Getting better at R
 
 <html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
 
@@ -63,7 +61,7 @@ if(params$isSlides == "yes"){
 "    
   )
 }else{
-  cat("# Set Up
+  cat("# Getting better at R
 
 ---
 "    
@@ -73,160 +71,83 @@ if(params$isSlides == "yes"){
 
 ```
 
-## Materials
 
-??We try to denote each major section of content with these title slides (see above for set up). The hierarchy will help with the different versions of the teaching content i.e. slides and single page.??
+## Getting better with R
 
-?? Materials just gives the links to download the package Just ensure links are up to date??
+When people start to run R regularly, often they will hit similar roadblocks.
 
-All prerequisites, links to material and slides for this course can be found on github.
+* Reading/writing code is slow
+  - More complex R operations can be inconsistent or unnecessarily complex
+  - Code can become nested 
 
-* [Intro_To_R_1](https://rockefelleruniversity.github.io/Intro_To_R_1Day/)
+* Running code is slow
+  - As data gets bigger, R can hit processing or memory limits that slow everything down. 
 
-Or can be downloaded as a zip archive from here.
+---
+## How do we deal with this?
 
-* [Download zip](https://github.com/rockefelleruniversity/Intro_To_R_1Day/zipball/master)
+* Reading/writing code is slow
+  - Tidyverse
 
+* Running code is slow
+  - Data.table
+  - Parallelization
+
+---
+## R ecosystems
+
+There are many different ecosystems or communities that exist within R. A popular example for bioinformatics is Bioconductor. Packages associated with Bioconductor have a shared ethos and approach designed to make life easier for the user. 
+
+Generally when you start using R you are using **Base R**. This is the set of functions and tools that come with into R by default. **Base R** is essentially the “core” of the R language. This includes basic data structures i.e. data frames, basic operations i.e. ==, and basic functions i.e. merge(). Most packages in R will be built on **Base R**, so this is why we focus on it during our [Intro course](https://rockefelleruniversity.github.io/Intro_To_R_1Day/). 
+
+---
+## R ecosystems
+
+  .pull-left[
+**Base R** is great as...
+1. There is no need to install extra packages
+2. It is pretty lightweight
+3. Gives you quite a lot of control
+]
+
+  .pull-right[
+  but...
+1. Syntax can be verbose or inconsistent.
+2. Some tasks can get quite tedious once you hit a little bit of complexity.
+3. The above issues can make writing code hard, and reading code even harder.
+]
+
+---
+## R ecosystems
+
+To deal with some of the drawbacks associated with base R, **Tidyverse** was developed.
+
+**Tidyverse** is a collection of packages such as *dplyr*, *tibble*, *ggplot2*, *stringr*. They were designed around a core set of **Tidy** principles that facilitate easy reading/writing and data analysis.
+
+**Tidyverse** also have great community and strong documentation and is well supported as it is integral to Posit/RStudio. Hadley Wickham (Chief Scientist at Posit/RStudio) is the driving force behind the tidyverse. 
+
+---
+## R ecosystems
+
+As good as Tidyverse is, it doesn't handle the speed issues R can face (and in fact can often be slower than base R), so in these cases an alternative system can be useful: **Data.table**.
 
 
 ---
-## Course materials
+## This is all to much!
 
-?? this slide just shows where thye can get the course content from the download. You do not need to populate these directories. It will be made during compilation??
+At this point you may be wondering why we learn 3 different ways to code in R. 
 
-Once the zip file in unarchived. All presentations as HTML slides and pages, their R code and HTML practical sheets will be available in the directories underneath.
-
-* **r_course/presentations/slides/**
-Presentations as an HTML slide show.
-* **r_course/presentations/singlepage/** 
-Presentations as an HTML single page.
-* **r_course/presentations/r_code/**
-R code in presentations.
-* **r_course/exercises/**
-Practicals as HTML pages. 
-* **r_course/answers/**
-Practicals with answers as HTML pages and R code solutions. 
-
-
+The reality is most folks use these 3 approaches interchangeable but in a specific targeted manner. 
 
 ---
-## Set the Working directory
+## When did you pick each?
+
+* Use tidyverse for clarity, documentation, and community support.
+* Use data.table for scale, speed, and efficient memory use.
+* Use base R when you need full control, minimal dependencies, or are working in older environments.
 
 
-Before running any of the code in the practicals or slides we need to set the working directory to the folder we unarchived. 
-
-You may navigate to the unarchived RU_Course_help folder in the Rstudio menu.
-
-**Session -> Set Working Directory -> Choose Directory**
-
-or in the console.
-
-```{r setwd_introtoR,eval=F} 
-setwd("/PathToMyDownload/RU_Course_template/r_course")
-# e.g. setwd("~/Downloads/Intro_To_R_1Day/r_course")
-```
 
 
----
-```{r, results='asis',include=TRUE,echo=FALSE}
-if(params$isSlides == "yes"){
-  cat("class: inverse, center, middle
-
-# Another section header
-
-<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
-
----
-"    
-  )
-}else{
-  cat("# Another section header
-
----
-"    
-  )
-  
-}
-
-```
-
-## Slide Structure
-
-We use the a double has/pound for slides. This is important for hierarchy. If you use 1 it will work for the slides, but will mess up the single page version.
 
 
-## Left/Right alignment
-
-To show things side by side on a slide you can use pull left/right. t is important to keep the tab on the second square bracket. On single page it will just be one after the other:
-
-.pull-left[
-This will be on left of slide
-  ] 
-  
-.pull-right[
-This will be on right
-
- ]
-
-
-## Data from external sources
-
-everything in the rmd is relative to the inst/extdata directory so you have some data to load in, just put it in the data directory, read it in along the path. 
-The structure is maintained for those attending the course and download the package using the instructions. The same rules are followed for imgs and scripts that you may call.
-```{r,echo=T}
-Table <- read.table("data/readThisTable.csv",sep=",",header=T)
-
-```
-
-## Big Processes
-
-If what you want to do is super intense computationally you can use the eval=F arguments to prevent it being done during compilation.
-
-```{r,echo=T, eval=F}
-#Intense computation
-myresult<-10^6 +1
-
-```
-
-You can then just load in the result of the computation, and keep using the result after that. If you do want them to evaluate the intense computation, then you can hide this intermediate file that you are loading in with echo=F. 
-
-```{r,echo=F, eval=T}
-load("data/myresult.RData")
-
-```
-
---
-## Exercises
-The following few slides show you how to structure exercise slides.
-
-We often have several exercise slides per session. So you can just copy and paste and change the directory to the appropriate name. All 3 file types are made from you single exercise Rmd. 
-
----
-## Time for an exercise!
-
-??? exercise description here?? [here](../../exercises/exercises/MyExercise1_exercises.html)
-
----
-## Answers to exercise
-
-Answers can be found [here](../../exercises/answers/MyExercise1_answers.html)
-
-R code for solutions can be found [here](../../exercises/answers/MyExercise1_answers.R)
-
-## Exercise again
-
-So we can have some more sections here describing some new important topic
-
-Then more exercises
-
----
-## Time for an exercise!
-
-??? exercise description here?? [here](../../exercises/exercises/MyExercise2_exercises.html)
-
----
-## Answers to exercise
-
-Answers can be found [here](../../exercises/answers/MyExercise2_answers.html)
-
-R code for solutions can be found [here](../../exercises/answers/MyExercise2_answers.R)

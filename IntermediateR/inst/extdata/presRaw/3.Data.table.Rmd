@@ -31,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE, tidy = T)
 
 ```{r, results='asis',include=TRUE,echo=FALSE}
 if(params$isSlides != "yes"){
-  cat("# ?? name of course?? (part 2)
+  cat("# Intermediate R (part 3)
 
 ---
 "    
@@ -41,20 +41,570 @@ if(params$isSlides != "yes"){
 
 ```
 
-
 ##  Recap
 
-?? can add a recap to link to keypoints in first session??
-Session 1 covered introduction to R data types and import/export of data.
+In the last session we learned all about tidyverse:
+
+* Easier reading and writing code
+* Tidy data and how to tidy
+* Magrittr for Piping
+* Dplyr for filtering, selecting, arranging, merging
+* Readr and vroom for reading and writing
+* Stringr for manipulating strings
+* Purrr for functional programming
+
+---
+## Plan
 
 - [Background to R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#background-to-r)
 - [Data types in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#data_types_in_r)
 - [Reading and writing in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#reading-and-writing-data-in-r)
 
 
+
 ---
-## Same stuff
-??More content for second session??
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Making R faster with data.table
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Making R faster with data.table
+---
+"    
+  )
+  
+}
+
+```
+
+
+## data.table
+
+*data.table* is another R package that provides a different version of a data.frame. data.tables have more features with an emphasis on speed of code evaluation and concise code. 
+
+An example of this is in the *order* function used by data.table which uses a very fast algorithm. The speed increase (~3-5x for 1-100 million data points) actually resulted in base R changing their own default sort algorithm. 
+
+## data.table philosophy
+
+Key concepts for data.table:
+  * Modify in place
+  * No copies unless necessary
+  * Compact syntax
+
+These goals are allow increased speed and memory. 
+
+---
+## Reading in a data.table
+
+The *fread()* function can import data straight into a data.table format. 
+
+```{R}
+library(data.table)
+
+expressed_norm <- fread("data/expressed_genes_output_norm.csv")
+
+expressed_norm
+```
+
+---
+## Indexing
+
+Indexing data.tables works in a similar way to data.frames using the square brackets *[,]*.
+
+```{r}
+expressed_norm[1,1]
+```
+
+```{r}
+expressed_norm[1,]
+```
+
+```{r}
+expressed_norm[,1]
+```
+
+---
+## Special Indexing
+
+That said you can also just supply a single value. This is a row oriented evaluation. 
+
+```{r}
+expressed_norm[1]
+
+```
+
+---
+## Special Indexing
+
+You can also grab the column information using the double square brackets similar to a list (likewise you could also use a dollar sign).
+
+```{r}
+expressed_norm[[1]]
+expressed_norm$ENTREZ
+
+```
+
+---
+## Special Indexing
+
+Lastly we can use the names. Similar to the tidyverse, data.table is aware of the column names and can interpret provided values. This means we do not have to be provided them as characters. Also, we can use tab-complete for completing these names. 
+
+```{r}
+
+expressed_norm[, CellType]
+
+```
+
+---
+## Special Indexing
+
+Providing the column name as it is will gives back a vector. If we want a data.table we must give our column names as a list. 
+
+```{r}
+expressed_norm[, list(CellType )]
+```
+
+---
+## Special Indexing
+
+As we have mentioned data.table does some interpretation of the inputs, allowing for more complex and concise operations. One of these is additional data.table specific nomenclature. One of these is the period *.()* can be used as an alias for *list()*.
+
+```{r}
+expressed_norm[, .(CellType )]
+
+```
+
+ 
+---
+## Special Indexing
+
+As we are using a list, we can also subset our data.table to multiple columns using a list with multiple column names. 
+
+```{r}
+expressed_norm[, .(Sample, CellType)]
+
+```
+
+
+---
+## Ordering
+
+We can use the order function to sort the data.table based on a specific column, in this case counts. We can modify the direction of the ordering simply using a minus sign: **-**.
+
+
+  .pull-left[
+```{r}
+expressed_norm[order(counts)]
+```
+]
+
+  .pull-right[
+```{r}
+expressed_norm[order(-counts)]
+```
+
+]
+
+---
+## Filtering
+
+You can filter in much the same way as regular data frames. 
+
+```{r}
+expressed_norm[Sample == "CD34_1"]
+```
+
+---
+## Functions and summaries
+
+As we have mentioned data.table does some interpretation of the indexing input. Here we call functions within our square brackets to generate some summary information.
+
+```{r}
+expressed_norm[, mean(TPM)]
+
+```
+
+---
+## Functions and summaries
+
+We can combine this with subsetting and do multiple function evaluations to do some complex summarizations.  
+
+```{r}
+expressed_norm[Sample == "CD34_1",
+               .(mean_counts = mean(counts),
+               mean_tpm = mean(TPM))]
+
+```
+
+
+---
+## Functions and summaries
+
+Alternatively we could do some evaluation of logical expressions. In this case we will see how many genes have a TPM greater than 100. 
+
+```{r}
+expressed_norm[Sample == "CD34_1",
+               sum(TPM > 100)]
+
+```
+
+---
+## Grouping and Summaries
+
+We can use the *by* argument to also allow for grouping and summarization of data. This is a one step operation that does not require saving intermediate (base R) or piping (tidy R).
+
+```{r}
+expressed_norm[,sum(counts), by = Sample]
+
+```
+
+---
+## Grouping multiple variables
+
+We can also use the same approach to summarize multiple aspects of our data. That said you will need to wrap it as a list. 
+
+```{r}
+
+expressed_norm[,.(counts.sum=sum(counts),
+                  counts.median=median(counts)), by = Sample]
+
+```
+
+---
+## In-place assignment
+
+The := allows for in-place assignment and modifcation of our table. We can quickly add columns, without intermediates.
+
+```{r}
+expressed_norm[, RPKM := CPM/(LENGTH/1000) ]
+expressed_norm
+```
+
+---
+## In-place assignment
+
+This can be used in conjunction with filters to create conditional entries into our data.table. 
+
+```{r}
+expressed_norm[TPM > 10, flag := TRUE]
+expressed_norm
+```
+
+---
+## In-place assignment
+
+We can also use this operation to assign NULL values which essentially removes columns. 
+
+```{r}
+expressed_norm[, flag := NULL]
+```
+
+---
+## Setting keys for speed
+
+We can increase the speed of data.table operations by setting a key. This sorts and indexes the column. This makes it easier (and more importantly faster) for to search within this column. 
+
+```{r}
+setkey(expressed_norm, ENTREZ)
+expressed_norm
+```
+
+Though it takes time up front to set keys, this quickly becomes time efficient if you are planning on repeatedly filtering your table or joining it with other tables. 
+
+---
+## Binary search
+
+Previously we have showed you how to subset an array using regular indexing. Under the hood this is doing a linear scan i.e. it start at position one, see if it matches, then moves on. 
+
+```{r}
+expressed_norm[ENTREZ == 483]
+
+```
+
+If a key has been set a binary search can be performed on this column, which is exponentially faster. It uses the fact that it is sorted to jump through the data in large steps while looking for matches. 
+
+```{r}
+expressed_norm[.(483)]
+
+```
+
+---
+# Keys with multiple variables
+
+You can make a key from multiple variables. We are not showing it here, but this can be nice for working with genomic ranges (i.e. chromosome, start, end, strand)
+
+```{r}
+setkey(expressed_norm, ENTREZ, CellType)
+expressed_norm[.(483,"CD34")]
+```
+
+---
+# Multiple Keys
+
+You cannot have multiple keys, as an intrinsic part of the key is that the data.table is sorted based on it. You can create an index though. This is a precomputed map from values to row positions. Data.table can then use this to jump directly to matches. 
+
+```{r}
+setindex(expressed_norm, CellType)
+expressed_norm[.("CD34"), on = "CellType"]
+
+```
+
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Coercion and Import/Export
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Coercion and Import/Export
+---
+"    
+  )
+  
+}
+
+```
+
+
+# Coercion
+
+As with other data types we can easily convert between data.tables and other types of data frames using the appropriate as.*new.object* functions.
+
+
+```{r}
+is(expressed_norm)
+```
+
+```{r}
+df <- as.data.frame(expressed_norm)
+is(df)
+```
+
+```{r}
+tibb <- as_tibble(expressed_norm)
+is(tibb)
+```
+
+---
+# Coercion
+
+We can also go back the other way with as.data.table. 
+
+```{r}
+as.data.table(tibb)
+```
+
+---
+# Data import
+
+The input and output of data is often one of the most time consuming parts of bioinformatics analysis. This is because we are handling large memory-intensive datasets. 
+
+We have used a basic fread() to read in our data so far.
+
+```{r}
+expressed_norm <- fread("data/expressed_genes_output_norm.csv")
+
+```
+
+---
+# Data import
+
+To help improve speed we can use multiple threads (readr also has a similar argument).
+
+```{r}
+expressed_norm <- fread("data/expressed_genes_output_norm.csv",
+                        nThread = 4)
+
+```
+
+---
+# Data import
+
+Instead of providing a path to file, you can also provide a cmd that pipes in a preprocessed file.
+
+In this case we are using awk to filter our file down to CD34_1 only and also give us only the 1st, 2nd and 5th column. A similar approach can help read in compressed files directly.
+
+```{r}
+expressed_norm_sub <- fread(cmd = "awk -F',' -v OFS=',' '$2==\"CD34_1\" {print $1, $2, $5}' data/expressed_genes_output_norm.csv",
+             nThread = 4)
+head(expressed_norm_sub)
+```
+
+---
+# Data export
+
+The counterpart to fread, is fwrite. There are similar advanced utilities and arguments for write as well as read. 
+
+For example here we will compress the file on export. 
+
+```{r}
+fwrite(expressed_norm_sub, file = "data/expressed_norm_sub.tsv.gz",
+       sep = "\t", nThread = 8, compress = "gzip")
+```
+
+```{r}
+
+
+# C) chunked writes (process huge file in pieces)
+first <- TRUE
+for (chunk in chunk_generator()) {   # chunk_generator() yields data.tables
+  if (first) {
+    fwrite(chunk, file = "out/genes_large.tsv.gz", sep = "\t", quote = FALSE,
+           na = "", nThread = 4, compress = "gzip", col.names = TRUE)
+    first <- FALSE
+  } else {
+    fwrite(chunk, file = "out/genes_large.tsv.gz", sep = "\t", quote = FALSE,
+           na = "", nThread = 4, compress = "gzip", append = TRUE, col.names = FALSE)
+  }
+  rm(chunk); gc()
+}
+
+# D) produce bgzip (tabix) output via a pipe (bgzip must be in PATH)
+con <- pipe("bgzip -c > out/genes.bgz", "w")
+fwrite(dt, file = con, sep = "\t", quote = FALSE, na = "", nThread = 4, col.names = TRUE)
+close(con)
+# then create index with tabix (if needed)
+system2("tabix", c("-p", "bed", "out/genes.bgz"))
+
+```
+
+---
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Speed and Memory Comparison
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
+  cat("# Speed and Memory Comparison
+---
+"    
+  )
+  
+}
+
+```
+
+
+
+
+---
+# Lets Compare - base R
+
+Let's do a quick review and test. We will read in and perform some data summarization using a full dataset.
+
+In baseR this is a simple two step process.
+
+```{r}
+
+GSE216319_TPM <- read.csv("data/GSE216319_TPM_PerSampleTable.csv")
+aggregate(counts ~ Sample, data = GSE216319_TPM, sum)
+
+```
+
+---
+# Lets Compare - Tidy and data.table
+
+  .pull-left[
+  
+In tidy it requires a few more lines, but is a little more intuitive. 
+```{r}
+
+GSE216319_TPM <- read_csv("data/GSE216319_TPM_PerSampleTable.csv")
+GSE216319_TPM %>%
+  group_by(Sample) %>%
+  summarise(counts = median(TPMs), .groups = "drop")
+
+```
+]
+
+  .pull-right[
+While data.table it just requires a modified indexing operation. 
+```{r}
+
+GSE216319_TPM <- fread("data/GSE216319_TPM_PerSampleTable.csv")
+GSE216319_TPM[, median(TPMs), by = Sample]
+
+```
+]
+
+---
+# Lets Compare - Speed and Memory
+
+Though this is pretty straightforward analysis, we can already start to see differences in memory usage and processing speed.
+
+```{r, echo=F, warning=F, message=F}
+library(readr)
+library(dplyr)
+
+base <- function(){
+GSE216319_TPM <- read.csv("data/GSE216319_TPM_PerSampleTable.csv")
+aggregate(TPMs ~ Sample, data = GSE216319_TPM, median)}
+
+tidy <- function(){
+GSE216319_TPM <- read_csv("data/GSE216319_TPM_PerSampleTable.csv")
+GSE216319_TPM %>%
+  group_by(Sample) %>%
+  summarise(counts = median(TPMs), .groups = "drop")
+}
+
+data.tab <- function(){
+GSE216319_TPM <- fread("data/GSE216319_TPM_PerSampleTable.csv")
+GSE216319_TPM[, median(TPMs), by = Sample]
+}
+
+
+base_time <- bench::mark(
+  base()
+)
+
+tidy_time <- bench::mark(
+  tidy()
+)
+
+dt_time <- bench::mark(
+  data.tab()
+)
+
+a <- object.size(read.csv("data/GSE216319_TPM_PerSampleTable.csv"))
+b <- object.size(read_csv("data/GSE216319_TPM_PerSampleTable.csv"))
+c <- object.size(fread("data/GSE216319_TPM_PerSampleTable.csv"))
+
+
+timings <- rbind(base_time, tidy_time, dt_time)
+timings <- as.data.frame(unlist(timings[,9]))
+timings <- cbind(timings, c(a,b,c))
+rownames(timings) <- c("baseR","tidyR","data.table")
+colnames(timings) <- c("Time/ms","Memory Used")
+timings
+```
+
+# Use Cases
+
+
+    
+
+        * use case comparisons to base, tidy and data.table
+    - overlap range tools (mention)
 
 ---
 ## Time for an exercise!
