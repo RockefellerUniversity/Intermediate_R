@@ -167,7 +167,7 @@ write.table(a,"test2.txt")
 setDT(expressed_norm)
 ```
 
-```{r, subset5}
+```{r, subset5, eval=F}
 
 expressed_norm[, CellType]
 
@@ -178,7 +178,7 @@ expressed_norm[, CellType]
 
 Providing the column name as it is will gives back a vector. If we want a data.table we must give our column names as a list. 
 
-```{r, subset6}
+```{r, subset6, eval=F}
 expressed_norm[, list(CellType )]
 ```
 
@@ -187,7 +187,7 @@ expressed_norm[, list(CellType )]
 
 As we have mentioned data.table does some interpretation of the inputs, allowing for more complex and concise operations. One of these is additional data.table specific nomenclature. One of these is the period *.()* can be used as an alias for *list()*.
 
-```{r, subset7}
+```{r, subset7, eval=F}
 expressed_norm[, .(CellType)]
 
 ```
