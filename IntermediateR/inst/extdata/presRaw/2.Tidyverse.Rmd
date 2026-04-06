@@ -54,8 +54,20 @@ if(params$isSlides != "yes"){
 - [Vecotrized iterations with purrr]()
 - [Working with factors with forcats]() 
 
+
+---
 ```{r, results='asis',include=TRUE,echo=FALSE}
-if(params$isSlides != "yes"){
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Making R easier with Tidyverse
+
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+
+---
+"    
+  )
+}else{
   cat("# Making R easier with Tidyverse
 
 ---
@@ -498,7 +510,7 @@ untidy_counts
 ```
 
 ---
-## Reshape data with pivot_longer and pivot_wider
+## Reshape data with pivot_*
 
 In this case we have multiple samples as columns. Though this is intuitive for some analyses and plotting, often this is not what we want and it is untidy. When all the data is in the wrong orientation, tidyr has some tools to move the data around quickly and easily:  
 
@@ -633,7 +645,7 @@ Piping allows you to pass the result from one expression directly into another. 
 
 How does this work with R? We follow a specific logical flow:
 
-![dplyr](./imgs/dplyr_pipe2.png)
+![dplyr](./imgs/dplyr_pipe.png)
 
 ---
 ## Piping in base R
@@ -1328,28 +1340,6 @@ untidy_counts %>%
   map_dbl(mean)
 ```
 
----
-## With tidy data - summarize sometimes
-
-Summary sometimes also works in this context
-```{r}
-
-tidy_counts %>% 
-  group_by(Sample) %>% 
-  summarize(mean_counts = mean(counts))
-```
-
----
-## With tidy data - the purrr way
-
-This is an alternative method for doing this with an tidied frame
-
-```{r}
-
-tidy_counts %>% 
-  split(.$Sample) %>% 
-  map_dbl(~mean(.$counts))
-```
 
 ---
 ## purrr::pmap for multiple inputs
@@ -1536,6 +1526,7 @@ data <- vroom(files)
 
 
 ```
+
 ---
 ## Why not always vroom?
 

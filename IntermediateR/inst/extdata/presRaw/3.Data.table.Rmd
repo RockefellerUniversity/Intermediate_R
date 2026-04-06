@@ -1,5 +1,5 @@
 ---
-title: "My Course Template, Session 2"
+title: "Intermediate R, Session 3"
 subtitle: " <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html> Bioinformatics Resource Center - Rockefeller University"
 author: 
   - "http://rockefelleruniversity.github.io/RU_course_template/"
@@ -91,6 +91,7 @@ if(params$isSlides == "yes"){
 
 An example of this is in the *order* function used by data.table which uses a very fast algorithm. The speed increase (~3-5x for 1-100 million data points) actually resulted in base R changing their own default sort algorithm. 
 
+---
 ## data.table philosophy
 
 Key concepts for data.table:
@@ -489,17 +490,13 @@ if(params$isSlides == "yes"){
 
 ```
 
-
-
-
----
 # Lets Compare - base R
 
 Let's do a quick review and test. We will read in and perform some data summarization using a full dataset.
 
 In baseR this is a simple two step process.
 
-```{r, eval=F}
+```{r, eval=T}
 
 GSE216319_TPM <- read.csv("data/GSE216319_TPM_PerSampleTable.csv")
 aggregate(counts ~ Sample, data = GSE216319_TPM, sum)
@@ -512,7 +509,7 @@ aggregate(counts ~ Sample, data = GSE216319_TPM, sum)
   .pull-left[
   
 In tidy it requires a few more lines, but is a little more intuitive. 
-```{r, eval=F}
+```{r, eval=T}
 
 GSE216319_TPM <- read_csv("data/GSE216319_TPM_PerSampleTable.csv")
 GSE216319_TPM %>%
@@ -524,7 +521,7 @@ GSE216319_TPM %>%
 
   .pull-right[
 While data.table it just requires a modified indexing operation. 
-```{r, eval=F}
+```{r, eval=T}
 
 GSE216319_TPM <- fread("data/GSE216319_TPM_PerSampleTable.csv")
 GSE216319_TPM[, median(TPMs), by = Sample]
@@ -537,7 +534,7 @@ GSE216319_TPM[, median(TPMs), by = Sample]
 
 Though this is pretty straightforward analysis, we can already start to see differences in memory usage and processing speed.
 
-```{r, echo=F, warning=F, message=F, eval=F}
+```{r, echo=F, warning=F, message=F, eval=T}
 library(readr)
 library(dplyr)
 library(bench)

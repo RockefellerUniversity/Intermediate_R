@@ -140,7 +140,7 @@ At this point you may be wondering why we learn 3 different ways to code in R.
 The reality is most folks use these 3 approaches interchangeable but in a specific targeted manner. 
 
 ---
-## When did you pick each?
+## When do you pick each?
 
 * Use tidyverse for clarity, documentation, and community support.
 * Use data.table for scale, speed, and efficient memory use.
