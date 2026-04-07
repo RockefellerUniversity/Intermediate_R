@@ -82,14 +82,14 @@ TPMs[TPMs == 0, flag := TRUE]
 
 - Create a key by gene symbol
 
-```{r, eval=F}
+```{r, eval=F, echo=toMessage}
 setkey(TPMs, Symbols)
 TPMs[.("Gapdh")]
 ```
 
 - Do the same but use an index for ID. Again look for Gapdh (14433)
 
-```{r, eval=F}
+```{r, eval=F, echo=toMessage}
 setindex(TPMs, IDs)
 TPMs[.(14433), on="IDs"]
 ```
