@@ -197,12 +197,12 @@ myFirstFuture
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: b0840d1dcab3a74985f56aea3ae71e25-1
-## Owner process: b0840d1dcab3a74985f56aea3ae71e25
+## Unique identifier: ff677d458173160bca7ae9137640a890-1
+## Owner process: ff677d458173160bca7ae9137640a890
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 39 bytes of class 'numeric'
-## Duration: 0.03076124 secs (started 2026-04-07 18:36:03.758841)
-## Worker process: b0840d1dcab3a74985f56aea3ae71e25
+## Duration: 0.02989173 secs (started 2026-04-07 20:16:33.401068)
+## Worker process: ff677d458173160bca7ae9137640a890
 ```
 
 ---
@@ -282,12 +282,12 @@ myfuture
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: b0840d1dcab3a74985f56aea3ae71e25-3
-## Owner process: b0840d1dcab3a74985f56aea3ae71e25
+## Unique identifier: ff677d458173160bca7ae9137640a890-3
+## Owner process: ff677d458173160bca7ae9137640a890
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 39 bytes of class 'numeric'
-## Duration: 0.002733946 secs (started 2026-04-07 18:36:04.252864)
-## Worker process: b0840d1dcab3a74985f56aea3ae71e25
+## Duration: 0.002733946 secs (started 2026-04-07 20:16:33.877139)
+## Worker process: ff677d458173160bca7ae9137640a890
 ```
 
 ---
@@ -370,12 +370,12 @@ myfuture
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: b0840d1dcab3a74985f56aea3ae71e25-5
-## Owner process: b0840d1dcab3a74985f56aea3ae71e25
+## Unique identifier: ff677d458173160bca7ae9137640a890-5
+## Owner process: ff677d458173160bca7ae9137640a890
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 300 bytes of class 'tbl_df'
-## Duration: 0.003600359 secs (started 2026-04-07 18:36:04.719076)
-## Worker process: b0840d1dcab3a74985f56aea3ae71e25
+## Duration: 0.003155231 secs (started 2026-04-07 20:16:34.326828)
+## Worker process: ff677d458173160bca7ae9137640a890
 ```
 
 ---
@@ -535,12 +535,12 @@ res
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: b0840d1dcab3a74985f56aea3ae71e25-16
-## Owner process: b0840d1dcab3a74985f56aea3ae71e25
+## Unique identifier: ff677d458173160bca7ae9137640a890-16
+## Owner process: ff677d458173160bca7ae9137640a890
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 27 bytes of class 'NULL'
-## Duration: 2.005601 secs (started 2026-04-07 18:36:04.867107)
-## Worker process: b0840d1dcab3a74985f56aea3ae71e25
+## Duration: 2.005241 secs (started 2026-04-07 20:16:34.455877)
+## Worker process: ff677d458173160bca7ae9137640a890
 ```
 
 ---
@@ -568,7 +568,7 @@ plan()
 ## - call: plan(sequential)
 ## SequentialFutureBackend:
 ## Inherits: FutureBackend
-## UUID: 6a9562e73a969d12b622d483991fa2b3
+## UUID: 30343ce2de1f44489a786d3f4f280275
 ## Number of workers: 1
 ## Number of free workers: 1
 ## Available cores: 4
@@ -580,7 +580,7 @@ plan()
 ## Argument 'hooks': FALSE
 ## Number of active futures: 0
 ## Number of futures since start: 16 (16 created, 16 launched, 16 finished)
-## Total runtime of futures: 2.078669 secs (0.1299168 secs/finished future)
+## Total runtime of futures: 2.072329 secs (0.1295206 secs/finished future)
 ```
 
 
@@ -782,8 +782,8 @@ res
 ## Actions: [n=1] 'run'
 ## State: 'running' ("Future is being evaluated")
 ## Resolved: FALSE
-## Unique identifier: b0840d1dcab3a74985f56aea3ae71e25-17
-## Owner process: b0840d1dcab3a74985f56aea3ae71e25
+## Unique identifier: ff677d458173160bca7ae9137640a890-17
+## Owner process: ff677d458173160bca7ae9137640a890
 ## Class: 'MultisessionFuture', 'ClusterFuture', 'MultiprocessFuture', 'Future'
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;
@@ -818,8 +818,8 @@ res
 ## Actions: [n=1] 'run'
 ## State: 'running' ("Future is being evaluated")
 ## Resolved: TRUE
-## Unique identifier: b0840d1dcab3a74985f56aea3ae71e25-17
-## Owner process: b0840d1dcab3a74985f56aea3ae71e25
+## Unique identifier: ff677d458173160bca7ae9137640a890-17
+## Owner process: ff677d458173160bca7ae9137640a890
 ## Class: 'MultisessionFuture', 'ClusterFuture', 'MultiprocessFuture', 'Future'
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;
@@ -1080,6 +1080,7 @@ y &lt;- foreach(x = 1:10) %dopar% {
 }
 ```
 
+---
 ## doFuture and BiocParallel
 
 BiocParallel is the framework for parallelisation with in the Bioconductor framework.
@@ -1134,7 +1135,7 @@ class: inverse, center, middle
 
 The futurize package offers a perhaps easier way to parallelise your analysis.
 
-.pull-left[
+  .pull-left[
 
 ``` r
 library(futurize)
@@ -1178,7 +1179,8 @@ lapply(1:10,sqrt) |&gt; futurize()
 ## [1] 3.162278
 ```
 ]
-.pull-right[
+
+  .pull-right[
 
 ``` r
 sapply(list(Tom=c(1,33,4),
@@ -1199,6 +1201,8 @@ sapply(list(Tom=c(1,33,4),
 ## 100% 33.0 44.0  32
 ```
 ]
+
+---
 ## Futurize
 
 Many common R and Biocoonductor functions have been implemented in the futurize
@@ -1217,7 +1221,6 @@ dds &lt;- DESeq(dds) |&gt; futurize()
 ```
 
 ---
-
 # When to use future
 
 * Large independent jobs
