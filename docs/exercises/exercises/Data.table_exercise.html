@@ -12,7 +12,7 @@
 <meta name="author" content="Rockefeller University, Bioinformatics Resource Centre" />
 
 
-<title>My Exercise 2</title>
+<title>My Exercise - Data.Tables</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -326,7 +326,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">My Exercise 2</h1>
+<h1 class="title toc-ignore">My Exercise - Data.Tables</h1>
 <h4 class="author">Rockefeller University, Bioinformatics Resource
 Centre</h4>
 <h4 class="date"><a href="https://rockefelleruniversity.github.io/RU_course_template/" class="uri">https://rockefelleruniversity.github.io/RU_course_template/</a></h4>
@@ -337,19 +337,23 @@ Centre</h4>
 <p>
  
 </p>
-<p>These exercises are about ??Add a summary of the topic?? <a href="https://rockefelleruniversity.github.io/Intermediate_R/">??Topic
-Name??</a>.</p>
-<p><strong>Exercise 1</strong> - <strong>??Ex 1 title if it has
-one??</strong></p>
+<p>These exercises are about <a href="https://rockefelleruniversity.github.io/Intermediate_R/">Data.Tables</a>.</p>
+<p><strong>Exercise 2</strong> - <strong>Data.Tables</strong></p>
 <ul>
-<li>??What is the first question??</li>
+<li><p>Read in the data at:
+<em>data/SE216319_TPM_PerSampleTable.csv</em></p></li>
+<li><p>Extract out the unique symbols</p></li>
+<li><p>Create a data.table with just the Symbol and IDs (in that
+order).</p></li>
+<li><p>Do the same but ensure they are ordered by TPM</p></li>
+<li><p>Subset the data to look at Gapdh</p></li>
+<li><p>Calculate the mean TPM for IECs_Vehicle_Mock_rep1_TPM</p></li>
+<li><p>Calculate the mean TPM for all samples in one-line</p></li>
+<li><p>Create a column that labels if the TPM is equal to 0.</p></li>
+<li><p>Create a key by gene symbol</p></li>
+<li><p>Do the same but use an index for ID. Again look for Gapdh
+(14433)</p></li>
 </ul>
-<pre><code>## Hello World</code></pre>
-<pre><code>## [1] 3</code></pre>
-<ul>
-<li>??What is the second question??</li>
-</ul>
-<p>?? You can just keep adding questions in this format ??</p>
 
 
 
