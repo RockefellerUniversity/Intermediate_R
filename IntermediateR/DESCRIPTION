@@ -10,7 +10,8 @@ LazyData: TRUE
 biocViews: Training
 Depends: methods, ggplot2, rmarkdown, rio, tidyverse, stringr, dplyr, 
   data.table, purrr, furrr, batchtools, BiocParallel, vroom, readr, tibble, 
-  forcats, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene, bench
+  forcats, org.Hs.eg.db, TxDb.Hsapiens.UCSC.hg38.knownGene, bench, future, future.batchtools, 
+  futurize, future.apply, doFuture, BiocParallel
 Suggests: knitr,
     rmarkdown,
     testthat,

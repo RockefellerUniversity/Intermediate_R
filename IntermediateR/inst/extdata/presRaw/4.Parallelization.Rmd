@@ -1,5 +1,5 @@
 ---
-title: "My Course Template, Session 2"
+title: "Intermediate R, Session 3"
 subtitle: " <html><div style='float:left'></div><hr color='#EB811B' size=1px width=796px></html> Bioinformatics Resource Center - Rockefeller University"
 author: 
   - "http://rockefelleruniversity.github.io/RU_course_template/"
@@ -21,17 +21,20 @@ output:
     theme: united  # many options for theme, this one is my favorite.
     highlight: tango  # specifies the syntax highlighting style
 params:
-  isSlides: "no"
+  isSlides: "yes"
 ---
 
-```{r setup, include=FALSE}
-suppressPackageStartupMessages(require(knitr))
-knitr::opts_chunk$set(echo = TRUE, tidy = T)
-```
-
 ```{r, results='asis',include=TRUE,echo=FALSE}
-if(params$isSlides != "yes"){
-  cat("# ?? name of course?? (part 2)
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Parallelization
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+"    
+  )
+}else{
+  cat("# Set Up
 
 ---
 "    
@@ -42,50 +45,757 @@ if(params$isSlides != "yes"){
 ```
 
 
-##  Recap
 
-?? can add a recap to link to keypoints in first session??
-Session 1 covered introduction to R data types and import/export of data.
+## Why Parallelization?
 
-- [Background to R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#background-to-r)
-- [Data types in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#data_types_in_r)
-- [Reading and writing in R](https://rockefelleruniversity.github.io/Intro_To_R_1Day/r_course/presentations/singlepage/introToR_Session1.html#reading-and-writing-data-in-r)
+- Modern datasets are large
+- Many analyses are embarrassingly parallel
+- Reduce runtime significantly
+
+---
+
+## When to Parallelize
+
+- Iterative tasks (loops)
+- Independent computations
+- Bootstrapping / permutations
+- Simulation studies
+
+---
+
+## When NOT to Parallelize
+
+- Small tasks
+- Strong dependencies between steps
+- Heavy I/O bottlenecks
+
+---
+
+## The future Ecosystem
+.pull-left[
+- `future` → core abstraction
+- `future.apply` → apply-style
+- `furrr` → tidyverse-style
+- `doFuture` → foreach backend
+[futureverse page](https://www.futureverse.org)
+]
+.pull-right[
+![Futureverse](imgs/futureverse.png)
+]
+---
+
+## Key Idea
+
+Provides abstraction layer where we concentrate on code we want to run and not spend time on programming how we parallelize.
+
+Write code once → run anywhere
+
+- Sequential
+- Multisession
+- Multicore
+- Cluster / HPC
+
+---
+
+## Installation
+
+```r
+install.packages(c(
+  "future",
+  "future.apply",
+  "furrr",
+  "doFuture"
+))
+```
+
+---
+
+## Loading Packages
+
+```{r,include=FALSE}
+library(future)
+library(future.apply)
+library(furrr)
+library(doFuture)
+```
+
+```r
+library(future)
+library(future.apply)
+library(furrr)
+library(doFuture)
+```
+
+---
+
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Future function
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+"    
+  )
+}else{
+  cat("# Future
+
+---
+"    
+  )
+  
+}
+
+```
+
+
+## The future function
+
+The *future* function form the **future** package creates a *future* that evaluates an R expression or a future that calls an R function with a set of arguments. 
+
+.pull-left[
+```{r,eval=FALSE}
+library(future)
+fut1 <- future(
+  myFunction(arg1,arg2)
+)
+
+```
+]
+.pull-right[
+```{r,eval=FALSE}
+library(future)
+fut2 <- future(
+  {
+    myNumber <- 30+10
+    mySquare <- sqrt(10)
+    finalNumber <- myNumber+mySquare
+    finalNumber
+  }
+)
+
+```
+]
+
+---
+
+## An example future
+
+for our first example we will create a very simple future.
+
+Here we run a simple mean of 3 numbers using the mean function and wrap it in a call to the future function.
+
+```{r}
+myFirstFuture <- future(mean(10,20,30))
+```
+
+---
+
+## A future object
+
+We get a future object back from the call to the future function.
+
+If we print this to screen we can see information on the object.
+
+```{r}
+myFirstFuture
+```
+
+---
+
+## The value() fnction
+
+To retrieve the result from the future object we have to use a special accessor, the *value* function.
+
+```{r}
+myResult <- value(myFirstFuture)
+myResult
+```
+
+---
+
+## value() errors
+
+If our function/expression results in an error then this is returned to the console on running *value()* and no value is returned. 
+
+```{r,error=TRUE}
+myfuture <- future(sum(1,2,"GoodDay"))
+res <- value(myfuture)
+res
+```
+
+---
+
+## Globals
+
+We can use objects from our R environment inside our future call. Objects used within the future are automatically packaged in the future.
+
+```{r,error=TRUE}
+x <- 10
+y <- 20
+myfuture <- future({
+  x+y
+})
+myfuture
+```
+
+---
+
+## Globals evaluated
+
+The globals are passed into the future and used in the evaluation of supplied function or expression.
+
+```{r}
+res <- value(myfuture)
+res
+```
+
+---
+
+## Globals explicit
+
+We can also pass in the globals we want to use explicitly.
+
+```{r}
+x <- 10
+y <- 20
+myfuture <- future({
+  x+y
+},globals = list(x=20,y=30))
+
+value(myfuture)
+```
+
+---
+
+## Packages
+
+If we use a function from a package within a future then the future object records the package for the function being used.
+
+The allows our future to load the package as part of the evaluation
+
+```{r}
+library(tibble)
+myfuture <- future({
+  as_tibble(1:10)
+})
+myfuture
+
+```
+
+---
+
+## Packages loaded in future
+
+Invisibly to us, the future has loaded the function as_tibble from the tibble package and the resulting tibble is returned in the result.
+
+```{r}
+myTibble <- value(myfuture)
+myTibble
+```
+
+---
+
+## futures in a loop
+
+If we want to run a series of futures we can do this in a loop and assign the future to elements of a list.
+
+We then have a list of future objects.
+
+```{r}
+res <- list()
+for(i in 1:10){
+  res[[i]] <- future(i^2)
+}
+length(res)
+```
+
+---
+
+## value on a list
+
+We can use the value function on a list of futures to get a list of results.
+
+```{r}
+value(res)
+```
+
+---
+
+## value with a reduce
+
+The value function also accepts a **reduce** argument. This describes how to summarise the results from a list of future results.
+
+Here we use the **c** function to turn list into a vector
+
+```{r}
+value(res,reduce="c")
+```
+
+---
+
+## value with another reduce
+
+We could also apply mathematical operators here to summarise the resuls.
+
+```{r}
+value(res,reduce="+")
+```
+
+---
+
+## Default parallelization mode
+
+By default our parallelization mode is "sequential". This means the results are calculated in serial and the R session is blocked as futures are evaluated.
+
+sequential futures are best used for debugging futures before setting an actual parallelization strategy.
+
+```{r}
+res <- future({Sys.sleep(2)})
+res
+```
+
+---
+
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Plans
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+"    
+  )
+}else{
+  cat("# Plans
+
+---
+"    
+  )
+  
+}
+
+```
+
+
+## The plan function
+
+* The future package's **plan()** function is the basic method of reviewing or setting the current parallelization stategy.
+
+```{r}
+plan()
+```
 
 
 ---
-## Same stuff
-??More content for second session??
 
+## Sequential Plan
 
+By default the parallelization strategy is to not parallelize and to run everything sequentially.
 
-* epxlain concept of threads and cores etc and running multiple processes on a tpyical laptop. what are limits?
+This is the same as running **plan(sequential)**
 
-* dig into parallelization - can do general but also applied
-* could also do genreal sxcripting and building workflow i..e warnings, trycatch, debug
+```{r}
+plan(sequential)
+```
 
-* options include:
-- parallel
-- futures
-- furrr
-- BiocParallel
-- touch on specifics of slurm
+---
 
+## Multisession Plan
 
+The next level of parallelization is that of **multisession**. 
 
+By using the **plan(multisession)** function and argument, jobs processed by future now are sent to seperate R sessions. 
 
+This works on all operating systems including Windows.
+
+```{r}
+plan(multisession)
+```
+
+---
+
+## Multicore Plan
+
+The **multicore** is very similar to that of **multisession**. 
+
+**plan(multicore)** forks processes at time of evaluation instead of reusing a set number of background R sessions.
+
+This is typically faster than **multisession**.
+
+This works on Linux and Mac systems.
+
+```{r}
+plan(multicore)
+```
 
 
 ---
-## Time for an exercise!
+
+# Cluster Plan
+
+The **cluster** plan allows you to connect to local or remote machines and run your R functions there.
+
+When running on your own machine this will act much like **multisession** but uses sockets directly.
+
+To take advantage of HPC environments we would recommend the extension package **future.batchtools** which interacts with common HPC job scheduling systems (Such as Slurm).
 
 
-Exercise on functions can be found [here](../..//exercises/exercises/MyExercise3_exercise.html)
+```{r}
+plan(cluster)
+```
 
 ---
-## Answers to exercise.
+
+## Multisession and multicore
+
+Multisession and multicore are the most popular methods for parellisation on laptops and desktops. For this session we will use multisession as this works in Windows and Rstudio.
+
+By default both multisession and multicore will use all available compute on your machine.
+
+We can see how many workers/cpus are available with the availableWorkers() and availableCores() functions.
+
+```{r}
+availableWorkers()
+availableCores()
+```
+
+---
+
+## Number of workers
+
+We can also use the nbrOfWorkers() function to see how many workers are allocated to the current plan.
+
+Note all workers are used by default when we set plan(multisession)
+
+```{r}
+plan(sequential)
+nbrOfWorkers()
+plan(multisession)
+nbrOfWorkers()
+```
+
+---
+
+## Asynchronous
+
+Unlink earlier where we had to wait for future to finish to progress in our R session, now we are using a multisession plan we can evaluate the expressions/functions asynchronously.
 
 
-Answers can be found here  [here](../..//exercises/answers/MyExercise3_answers.html)
+```{r,eval=FALSE}
+plan(multisession)
+res <- future({Sys.sleep(1)})
+res
+```
 
-Rcode for answers can be found here  [here](../..//exercises/answers//answers/MyExercise3_Answers.R)
+---
+
+## Asynchronous - nbrOfFreeWorkers
+We can use the *nbrOfFreeWorkers* function to see how many workers are currently used.
+.pull-left[
+```{r}
+nbrOfFreeWorkers()
+res <- future({Sys.sleep(1)})
+nbrOfFreeWorkers()
+```
+]
+.pull-right[
+
+```{r}
+res
+```
+]
+---
+
+## Asynchronous evaluation
+
+```{r}
+Sys.sleep(3)
+res
+```
+
+---
+
+## Blocking with value
+
+When we call value the R session becomes blocked until a value is available and/or the future resolves.
+
+```{r}
+res <- future({
+  Sys.sleep(1)
+  1+4
+  })
+value(res)
+```
+
+---
+
+## The resolved() function
+
+The *resolved* function allows you to check if a future has finished without blocking the R session.
+
+```{r}
+res <- future({
+  Sys.sleep(1)
+  1+4
+  })
+resolved(res)
+Sys.sleep(2)
+resolved(res)
+```
+
+---
+
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Futureverse
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+"    
+  )
+}else{
+  cat("# Futureverse
+
+---
+"    
+  )
+  
+}
+
+```
+
+## Futureverse
+
+The futureverse is a set of related packages which extend the functionality of the future package.
+
+This includes wrappers for other parallelisation package, such as forEach and Batchtools packages, as well extend other packages to include parallelisation layers, such as the Purrr package.
+
+---
+
+## future.apply
+
+The future.apply package offers a very easy user interface for parallelizing across vectors, lists and matrices/data.frames using specialised versions of the apply() family of functions.
+
+* apply - future.apply
+* lapply - future.lapply
+* sapply - future.sapply
+
+---
+
+## future.apply
+
+Just like apply, future.apply allows you to work across margins of a matrix and apply a function to rows, columns or cells.
+
+```{r}
+library(future.apply)
+myMat <- matrix(1:10,ncol=2)
+plan(multisession)
+future_apply(myMat,1,mean)
+```
+
+---
+
+## future.lapply
+
+Just like lapply, future.lapply allows you to work across vectors/lists
+
+```{r}
+plan(multisession)
+future_lapply(list(Tom=c(1,33,4),Matt=c(2,1,44),Jeny=c(32,12,10)),quantile )
+```
+
+---
+
+## future.sapply
+
+Just like sapply, future.sapply allows you to work across vectors/lists and returns the data in a **smart** way.
+
+```{r}
+plan(multisession)
+future_sapply(list(Tom=c(1,33,4),Matt=c(2,1,44),Jeny=c(32,12,10)),quantile)
+```
+
+---
+
+## Furrr
+
+The furrr package extends the purrr package by offering parallel versions of its functions.
+
+This includes a future_map replacement for purrr's map function.
+
+```{r}
+library(furrr)
+res <- future_map(1:10,sqrt)
+res
+```
+
+## future map
+
+This means you can use future_map as a drop in replacement for map in your dplyr workflows.
+
+
+```{r}
+library(furrr)
+
+datasets <- split(mtcars, mtcars$cyl)
+
+models <- future_map(datasets, ~ lm(mpg ~ wt, data = .x))
+
+models
+```
+
+---
+## doFuture
+
+The doFuture package allows us to use the syntax from the foreach package in a future parallelisation framework.
+
+For this we need to run the **registerDoFuture()** function before we set our plan and use the special **%dopar%** operator to set the function/expression to parallelise.
+
+
+```{r}
+library(doFuture)
+registerDoFuture()
+plan(multisession)
+
+y <- foreach(x = 1:10) %dopar% {
+  sqrt(x)
+}
+
+```
+
+## doFuture and BiocParallel
+
+BiocParallel is the framework for parallelisation with in the Bioconductor framework.
+
+BiocParallel is used internally in many Bioconductor package functions so havbing control of this with future is important
+
+
+```{r}
+library("doFuture")
+registerDoFuture()
+plan(multisession)
+library("BiocParallel")
+register(DoparParam(), default = TRUE)
+bplapply(1:10,sqrt)
+```
+
+## future.batchtools
+
+When we have access to an HPC environment we may want to take advantage of the job scheduler.
+
+Job schedulers such as slurm, sge, torque and LSF are all catered for by the batchtools package, here wrapped in future.batchtools.
+
+```{r,eval=FALSE}
+library(future.batchtools)
+plan(batchtools_slurm)
+```
+
+## future.batchtools template
+
+Sometimes the future.batchtools templates need to be modified to work on your own HPC environment.
+
+Altered templates can be specified in the plan function using template argument.
+
+```{r,eval=FALSE}
+library(future.batchtools)
+plan(batchtools_slurm,template="path/to/slurm_template.tmpl")
+```
+
+---
+
+```{r, results='asis',include=TRUE,echo=FALSE}
+if(params$isSlides == "yes"){
+  cat("class: inverse, center, middle
+
+# Futurize
+<html><div style='float:left'></div><hr color='#EB811B' size=1px width=720px></html> 
+---
+"    
+  )
+}else{
+  cat("# Futurize
+
+---
+"    
+  )
+  
+}
+
+```
+
+
+## Futurize
+
+The futurize package offers a perhaps easier way to parallelise your analysis.
+
+.pull-left[
+```{r}
+library(futurize)
+plan(multisession)
+lapply(1:10,sqrt) |> futurize() 
+
+```
+]
+.pull-right[
+```{r}
+sapply(list(Tom=c(1,33,4),
+            Matt=c(2,1,44),
+            eny=c(32,12,10)),quantile) |> futurize() 
+
+```
+]
+## Futurize
+
+Many common R and Biocoonductor functions have been implemented in the futurize
+
+A full list of functions and packages supported by futurize cann be found [here](https://futurize.futureverse.org)
+
+```{r,eval=FALSE}
+library(DESeq2)
+library(futurize)
+plan(multisession)
+cnts <- matrix(rnbinom(n=1000, mu=100, size=1/0.5), ncol=10)
+cond <- factor(rep(1:2, each=5))
+dds <- DESeqDataSetFromMatrix(cnts, DataFrame(cond), ~ cond)
+dds <- DESeq(dds) |> futurize()
+
+```
+
+---
+
+# When to use future
+
+* Large independent jobs
+* CPU-heavy workloads
+
+---
+
+# When not to use future
+
+* Small tasks
+* Disk-bound workflows
+
+---
+
+# What to worry with future
+
+* Size of globals being passed to future.
+* Seeds should be set in functions.
+
+---
+
+# Summary
+
+* `future` separates WHAT from HOW
+* Change backend with `plan()`
+* Scales from laptop to HPC
+
+---
+
+# Further Reading
+
+* future package documentation
+* futureverse.org
 
