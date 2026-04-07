@@ -665,6 +665,7 @@ y <- foreach(x = 1:10) %dopar% {
 
 ```
 
+---
 ## doFuture and BiocParallel
 
 BiocParallel is the framework for parallelisation with in the Bioconductor framework.
@@ -730,7 +731,7 @@ if(params$isSlides == "yes"){
 
 The futurize package offers a perhaps easier way to parallelise your analysis.
 
-.pull-left[
+  .pull-left[
 ```{r}
 library(futurize)
 plan(multisession)
@@ -738,7 +739,8 @@ lapply(1:10,sqrt) |> futurize()
 
 ```
 ]
-.pull-right[
+
+  .pull-right[
 ```{r}
 sapply(list(Tom=c(1,33,4),
             Matt=c(2,1,44),
@@ -746,6 +748,8 @@ sapply(list(Tom=c(1,33,4),
 
 ```
 ]
+
+---
 ## Futurize
 
 Many common R and Biocoonductor functions have been implemented in the futurize
@@ -764,7 +768,6 @@ dds <- DESeq(dds) |> futurize()
 ```
 
 ---
-
 # When to use future
 
 * Large independent jobs
