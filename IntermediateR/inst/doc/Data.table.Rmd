@@ -1,5 +1,5 @@
 ---
-title: "My Exercise 2"
+title: "My Exercise - Data.Tables"
 author: "Rockefeller University, Bioinformatics Resource Centre"
 date: "https://rockefelleruniversity.github.io/RU_course_template/"
 output: 
@@ -17,33 +17,79 @@ message(toMessage)
 ```
 
 <p>&nbsp;</p>
-These exercises are about ??Add a summary of the topic?? [??Topic Name??](https://rockefelleruniversity.github.io/Intermediate_R/). 
+These exercises are about [Data.Tables](https://rockefelleruniversity.github.io/Intermediate_R/). 
 
-**Exercise 1** - **??Ex 1 title if it has one??**
+**Exercise 2** - **Data.Tables**
 
-- ??What is the first question??
-```{r,echo=toMessage}
-## Add the solution in here. This will only be included in the exercise sections. This is controlled by the echo=toMessage in the markdown header  ie:
+- Read in the data at: *data/SE216319_TPM_PerSampleTable.csv*
 
-cat("Hello World")
+```{r, eval=F, echo=toMessage}
+library(data.table)
 
-a<-1+2
-b<-3+4
-
-mean(a,b)
+TPMs <- fread("data/GSE216319_TPM_PerSampleTable.csv")
+TPMs
 
 ```
 
-- ??What is the second question??
-```{r,echo=toMessage}
-## If your questions are too labor intensive to actually do during compilation you can add eval=F to the markdown header.
+- Extract out the unique symbols
+```{r, eval=F, echo=toMessage}
+sym_uni <- unique(TPMs[,Symbols])
+head(sym_uni)
+```
 
-## A caveat of using eval=F is you cannot check the code is running accurately, so it is good to at elast double check it yourself first
+- Create a data.table with just the Symbol and IDs (in that order).
 
-## If any subsequent chunks rely on answers from a chunk that is eval=F, you will need to load them back in. Ideally this will be done behind the scenes by setting echp=F for the chunk that just loads. 
+```{r, eval=F, echo=toMessage}
+sym2ID <- TPMs[,.(Symbols, IDs)]
+head(sym2ID)
+```
 
+- Do the same but ensure they are ordered by TPM
+
+```{r, eval=F, echo=toMessage}
+TPM_ord <- TPMs[order(-TPMs)]
+sym2ID <- TPM_ord[,.(Symbols, IDs)]
+head(sym2ID)
+```
+
+- Subset the data to look at Gapdh
+
+```{r, eval=F, echo=toMessage}
+TPMs[Symbols=="Gapdh"]
 
 ```
 
+- Calculate the mean TPM for IECs_Vehicle_Mock_rep1_TPM
 
-?? You can just keep adding questions in this format ??
+```{r, eval=F, echo=toMessage}
+TPMs[Sample == "IECs_Vehicle_Mock_rep1_TPM",
+               .(mean_TPMs = mean(TPMs))]
+
+```
+
+- Calculate the mean TPM for all samples in one-line
+```{r, eval=F, echo=toMessage}
+TPMs[,.(mean_TPMs = mean(TPMs)), by =Sample]
+
+```
+
+- Create a column that labels if the TPM is equal to 0.
+
+```{r, eval=F, echo=toMessage}
+TPMs[TPMs == 0, flag := TRUE]
+
+```
+
+- Create a key by gene symbol
+
+```{r, eval=F}
+setkey(TPMs, Symbols)
+TPMs[.("Gapdh")]
+```
+
+- Do the same but use an index for ID. Again look for Gapdh (14433)
+
+```{r, eval=F}
+setindex(TPMs, IDs)
+TPMs[.(14433), on="IDs"]
+```
