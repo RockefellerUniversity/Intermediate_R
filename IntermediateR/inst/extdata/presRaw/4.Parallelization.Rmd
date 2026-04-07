@@ -672,13 +672,13 @@ BiocParallel is the framework for parallelisation with in the Bioconductor frame
 BiocParallel is used internally in many Bioconductor package functions so havbing control of this with future is important
 
 
-```{r}
+```{r,eval=FALSE}
 library("doFuture")
 registerDoFuture()
 plan(multisession)
 library("BiocParallel")
 register(DoparParam(), default = TRUE)
-bplapply(1:10,sqrt)
+myRes <- bplapply(1:10,sqrt)
 ```
 
 ## future.batchtools
