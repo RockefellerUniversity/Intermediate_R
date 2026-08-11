@@ -64,11 +64,8 @@ navbar:
         href: exercises/exercises/Parallelization_exercise.html
       - text: Solution
         href: exercises/answers/Parallelization_answers.html
-  right:
   - text: Getting help!
     href: https://github.com//RockefellerUniversity/Intermediate_R/issues
-  - href: https://twitter.com/Rockefeller_BRC
-    icon: ion-social-twitter
 output:
   html_document:
     toc: yes
