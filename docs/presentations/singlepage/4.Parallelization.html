@@ -1689,9 +1689,8 @@ wrap it in a call to the future function.</p>
 <pre><code>## MultisessionFuture:
 ## Label: &lt;unnamed-48&gt;
 ## Expression:
-## mean(10, 20, 30)</code></pre>
-<pre><code>## Warning in serializedSize(x): &#39;package:dplyr&#39; may not be available when loading</code></pre>
-<pre><code>## Globals: 1 objects totaling 170.67 MiB (standardGeneric &#39;mean&#39; of 72.29 KiB)
+## mean(10, 20, 30)
+## Globals: 1 objects totaling 72.71 KiB (standardGeneric &#39;mean&#39; of 72.29 KiB)
 ## Packages: &lt;none&gt;
 ## L&#39;Ecuyer-CMRG RNG seed: &lt;none&gt; (seed = FALSE)
 ## Capture standard output: TRUE
@@ -1702,9 +1701,9 @@ wrap it in a call to the future function.</p>
 ## Early signaling: FALSE
 ## Actions: [n=1] &#39;run&#39;
 ## State: &#39;running&#39; (&quot;Future is being evaluated&quot;)
-## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-48
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Resolved: FALSE
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-48
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: &#39;MultisessionFuture&#39;, &#39;ClusterFuture&#39;, &#39;MultiprocessFuture&#39;, &#39;Future&#39;
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;</code></pre>
@@ -1713,19 +1712,19 @@ wrap it in a call to the future function.</p>
 <h2>The value() fnction</h2>
 <p>To retrieve the result from the future object we have to use a
 special accessor, the <em>value</em> function.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>myResult <span class="ot">&lt;-</span> <span class="fu">value</span>(myFirstFuture)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>myResult</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>myResult <span class="ot">&lt;-</span> <span class="fu">value</span>(myFirstFuture)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>myResult</span></code></pre></div>
 <pre><code>## [1] 10</code></pre>
 </div>
 <div id="value-errors" class="section level2">
 <h2>value() errors</h2>
 <p>If our function/expression results in an error then this is returned
 to the console on running <em>value()</em> and no value is returned.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">sum</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">&quot;GoodDay&quot;</span>))</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">value</span>(myfuture)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">sum</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="st">&quot;GoodDay&quot;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">value</span>(myfuture)</span></code></pre></div>
 <pre><code>## Error in `sum()`:
 ## ! invalid &#39;type&#39; (character) of argument</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>res</span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -1761,20 +1760,19 @@ to the console on running <em>value()</em> and no value is returned.</p>
 <p>We can use objects from our R environment inside our future call.
 Objects used within the future are automatically packaged in the
 future.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  x<span class="sc">+</span>y</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>})</span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>myfuture</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  x<span class="sc">+</span>y</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>})</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>myfuture</span></code></pre></div>
 <pre><code>## MultisessionFuture:
 ## Label: &lt;unnamed-50&gt;
 ## Expression:
 ## {
 ##     x + y
-## }</code></pre>
-<pre><code>## Warning in serializedSize(x): &#39;package:dplyr&#39; may not be available when loading</code></pre>
-<pre><code>## Globals: 2 objects totaling 170.67 MiB (numeric &#39;x&#39; of 39 bytes, numeric &#39;y&#39; of 39 bytes)
+## }
+## Globals: 2 objects totaling 524 bytes (numeric &#39;x&#39; of 39 bytes, numeric &#39;y&#39; of 39 bytes)
 ## Packages: &lt;none&gt;
 ## L&#39;Ecuyer-CMRG RNG seed: &lt;none&gt; (seed = FALSE)
 ## Capture standard output: TRUE
@@ -1785,9 +1783,9 @@ future.</p>
 ## Early signaling: FALSE
 ## Actions: [n=1] &#39;run&#39;
 ## State: &#39;running&#39; (&quot;Future is being evaluated&quot;)
-## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-50
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Resolved: FALSE
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-50
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: &#39;MultisessionFuture&#39;, &#39;ClusterFuture&#39;, &#39;MultiprocessFuture&#39;, &#39;Future&#39;
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;</code></pre>
@@ -1796,20 +1794,20 @@ future.</p>
 <h2>Globals evaluated</h2>
 <p>The globals are passed into the future and used in the evaluation of
 supplied function or expression.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">value</span>(myfuture)</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">value</span>(myfuture)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>res</span></code></pre></div>
 <pre><code>## [1] 30</code></pre>
 </div>
 <div id="globals-explicit" class="section level2">
 <h2>Globals explicit</h2>
 <p>We can also pass in the globals we want to use explicitly.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  x<span class="sc">+</span>y</span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>},<span class="at">globals =</span> <span class="fu">list</span>(<span class="at">x=</span><span class="dv">20</span>,<span class="at">y=</span><span class="dv">30</span>))</span>
-<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="fu">value</span>(myfuture)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  x<span class="sc">+</span>y</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>},<span class="at">globals =</span> <span class="fu">list</span>(<span class="at">x=</span><span class="dv">20</span>,<span class="at">y=</span><span class="dv">30</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="fu">value</span>(myfuture)</span></code></pre></div>
 <pre><code>## [1] 50</code></pre>
 </div>
 <div id="packages" class="section level2">
@@ -1818,19 +1816,18 @@ supplied function or expression.</p>
 object records the package for the function being used.</p>
 <p>The allows our future to load the package as part of the
 evaluation</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>})</span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>myfuture</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>myfuture <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>})</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>myfuture</span></code></pre></div>
 <pre><code>## MultisessionFuture:
 ## Label: &lt;unnamed-52&gt;
 ## Expression:
 ## {
 ##     as_tibble(1:10)
-## }</code></pre>
-<pre><code>## Warning in serializedSize(x): &#39;package:dplyr&#39; may not be available when loading</code></pre>
-<pre><code>## Globals: 1 objects totaling 1.09 KiB (function &#39;as_tibble&#39; of 774 bytes)
+## }
+## Globals: 1 objects totaling 1.20 KiB (function &#39;as_tibble&#39; of 774 bytes)
 ## Packages: 1 packages (&#39;tibble&#39;)
 ## L&#39;Ecuyer-CMRG RNG seed: &lt;none&gt; (seed = FALSE)
 ## Capture standard output: TRUE
@@ -1842,8 +1839,8 @@ evaluation</p>
 ## Actions: [n=1] &#39;run&#39;
 ## State: &#39;running&#39; (&quot;Future is being evaluated&quot;)
 ## Resolved: FALSE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-52
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-52
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: &#39;MultisessionFuture&#39;, &#39;ClusterFuture&#39;, &#39;MultiprocessFuture&#39;, &#39;Future&#39;
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;</code></pre>
@@ -1853,8 +1850,8 @@ evaluation</p>
 <p>Invisibly to us, the future has loaded the function as_tibble from
 the tibble package and the resulting tibble is returned in the
 result.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>myTibble <span class="ot">&lt;-</span> <span class="fu">value</span>(myfuture)</span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>myTibble</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>myTibble <span class="ot">&lt;-</span> <span class="fu">value</span>(myfuture)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>myTibble</span></code></pre></div>
 <pre><code>## # A tibble: 10 × 1
 ##    value
 ##    &lt;int&gt;
@@ -1874,18 +1871,18 @@ result.</p>
 <p>If we want to run a series of futures we can do this in a loop and
 assign the future to elements of a list.</p>
 <p>We then have a list of future objects.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  res[[i]] <span class="ot">&lt;-</span> <span class="fu">future</span>(i<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>}</span>
-<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="fu">length</span>(res)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  res[[i]] <span class="ot">&lt;-</span> <span class="fu">future</span>(i<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="fu">length</span>(res)</span></code></pre></div>
 <pre><code>## [1] 10</code></pre>
 </div>
 <div id="value-on-a-list" class="section level2">
 <h2>value on a list</h2>
 <p>We can use the value function on a list of futures to get a list of
 results.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">value</span>(res)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">value</span>(res)</span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -1923,14 +1920,14 @@ This describes how to summarise the results from a list of future
 results.</p>
 <p>Here we use the <strong>c</strong> function to turn list into a
 vector</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">value</span>(res,<span class="at">reduce=</span><span class="st">&quot;c&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">value</span>(res,<span class="at">reduce=</span><span class="st">&quot;c&quot;</span>)</span></code></pre></div>
 <pre><code>##  [1]   1   4   9  16  25  36  49  64  81 100</code></pre>
 </div>
 <div id="value-with-another-reduce" class="section level2">
 <h2>value with another reduce</h2>
 <p>We could also apply mathematical operators here to summarise the
 resuls.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">value</span>(res,<span class="at">reduce=</span><span class="st">&quot;+&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">value</span>(res,<span class="at">reduce=</span><span class="st">&quot;+&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] 385</code></pre>
 </div>
 <div id="default-parallelization-mode" class="section level2">
@@ -1940,8 +1937,8 @@ results are calculated in serial and the R session is blocked as futures
 are evaluated.</p>
 <p>sequential futures are best used for debugging futures before setting
 an actual parallelization strategy.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({<span class="fu">Sys.sleep</span>(<span class="dv">2</span>)})</span>
-<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({<span class="fu">Sys.sleep</span>(<span class="dv">2</span>)})</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>res</span></code></pre></div>
 <pre><code>## MultisessionFuture:
 ## Label: &lt;unnamed-63&gt;
 ## Expression:
@@ -1960,8 +1957,8 @@ an actual parallelization strategy.</p>
 ## Actions: [n=1] &#39;run&#39;
 ## State: &#39;running&#39; (&quot;Future is being evaluated&quot;)
 ## Resolved: FALSE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-63
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-63
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: &#39;MultisessionFuture&#39;, &#39;ClusterFuture&#39;, &#39;MultiprocessFuture&#39;, &#39;Future&#39;
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;</code></pre>
@@ -1983,14 +1980,14 @@ an actual parallelization strategy.</p>
 <li>The future package’s <strong>plan()</strong> function is the basic
 method of reviewing or setting the current parallelization stategy.</li>
 </ul>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">plan</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">plan</span>()</span></code></pre></div>
 <pre><code>## multisession:
 ## - args: function (..., workers = availableCores(constraints = &quot;connections-16&quot;), rscript_libs = .libPaths())
 ## - tweaked: FALSE
 ## - call: plan(multisession)
 ## MultisessionFutureBackend:
 ## Inherits: ClusterFutureBackend, MultiprocessFutureBackend, FutureBackend
-## UUID: 475dd7743694e4a16cd3c8e7ce71161b
+## UUID: bd5e370d4aa7e00a7a0526a8aaeea974
 ## Number of workers: 4
 ## Number of free workers: 3
 ## Available cores: 4
@@ -2042,22 +2039,22 @@ method of reviewing or setting the current parallelization stategy.</li>
 ## Argument &#39;calls&#39;: NULL
 ## Argument &#39;action&#39;: NULL
 ## Number of active futures: 1 (0 resolved, 1 unresolved)
-## Non-resolved future running times: min: 0.07s, 25%: 0.07s, 50%: 0.07s, mean: 0.07s, 75%: 0.07s, max: 0.07s
-## Number of futures since start: 47 (47 created, 47 launched, 52 finished)
-## Total runtime of futures: 9.350282 secs (0.1798131 secs/finished future)
+## Non-resolved future running times: min: 0.03s, 25%: 0.03s, 50%: 0.03s, mean: 0.03s, 75%: 0.03s, max: 0.03s
+## Number of futures since start: 47 (47 created, 47 launched, 46 finished)
+## Total runtime of futures: 6.828508 secs (0.1484458 secs/finished future)
 ## Workers of type RichSOCKcluster:
 ## - Summary: Socket cluster with 4 nodes on host &#39;localhost&#39; (R version 4.6.1 (2026-06-24), platform x86_64-pc-linux-gnu)
-## - [ OK ] Node 1/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13509 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #5 (&#39;&lt;-localhost:11885&#39;)]
-## - [ OK ] Node 2/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13510 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #6 (&#39;&lt;-localhost:11885&#39;)]
-## - [ OK ] Node 3/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13512 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #8 (&#39;&lt;-localhost:11885&#39;)]
-## - [ OK ] Node 4/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13511 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #7 (&#39;&lt;-localhost:11885&#39;)]</code></pre>
+## - [ OK ] Node 1/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13560 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #5 (&#39;&lt;-localhost:11360&#39;)]
+## - [ OK ] Node 2/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13559 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #6 (&#39;&lt;-localhost:11360&#39;)]
+## - [ OK ] Node 3/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13558 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #7 (&#39;&lt;-localhost:11360&#39;)]
+## - [ OK ] Node 4/4: valid connection, alive [RichSOCKnode of a socket cluster on local host &#39;localhost&#39; with pid 13557 (R version 4.6.1 (2026-06-24), x86_64-pc-linux-gnu) using socket connection #8 (&#39;&lt;-localhost:11360&#39;)]</code></pre>
 </div>
 <div id="sequential-plan" class="section level2">
 <h2>Sequential Plan</h2>
 <p>By default the parallelization strategy is to not parallelize and to
 run everything sequentially.</p>
 <p>This is the same as running <strong>plan(sequential)</strong></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span></code></pre></div>
 </div>
 <div id="multisession-plan" class="section level2">
 <h2>Multisession Plan</h2>
@@ -2067,9 +2064,7 @@ run everything sequentially.</p>
 argument, jobs processed by future now are sent to seperate R
 sessions.</p>
 <p>This works on all operating systems including Windows.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code></pre></div>
-<pre><code>## Warning in serialize(x, connection = NULL): &#39;package:dplyr&#39; may not be
-## available when loading</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code></pre></div>
 </div>
 <div id="multicore-plan" class="section level2">
 <h2>Multicore Plan</h2>
@@ -2079,7 +2074,7 @@ sessions.</p>
 evaluation instead of reusing a set number of background R sessions.</p>
 <p>This is typically faster than <strong>multisession</strong>.</p>
 <p>This works on Linux and Mac systems.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">plan</span>(multicore)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">plan</span>(multicore)</span></code></pre></div>
 </div>
 </div>
 <div id="cluster-plan" class="section level1">
@@ -2091,9 +2086,7 @@ remote machines and run your R functions there.</p>
 <p>To take advantage of HPC environments we would recommend the
 extension package <strong>future.batchtools</strong> which interacts
 with common HPC job scheduling systems (Such as Slurm).</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">plan</span>(cluster)</span></code></pre></div>
-<pre><code>## Warning in serialize(x, connection = NULL): &#39;package:dplyr&#39; may not be
-## available when loading</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">plan</span>(cluster)</span></code></pre></div>
 <div id="multisession-and-multicore" class="section level2">
 <h2>Multisession and multicore</h2>
 <p>Multisession and multicore are the most popular methods for
@@ -2103,9 +2096,9 @@ multisession as this works in Windows and Rstudio.</p>
 compute on your machine.</p>
 <p>We can see how many workers/cpus are available with the
 availableWorkers() and availableCores() functions.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">availableWorkers</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">availableWorkers</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;localhost&quot; &quot;localhost&quot; &quot;localhost&quot; &quot;localhost&quot;</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">availableCores</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">availableCores</span>()</span></code></pre></div>
 <pre><code>## system 
 ##      4</code></pre>
 </div>
@@ -2115,13 +2108,11 @@ availableWorkers() and availableCores() functions.</p>
 are allocated to the current plan.</p>
 <p>Note all workers are used by default when we set
 plan(multisession)</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span>
-<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a><span class="fu">nbrOfWorkers</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="fu">nbrOfWorkers</span>()</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span></code></pre></div>
-<pre><code>## Warning in serialize(x, connection = NULL): &#39;package:dplyr&#39; may not be
-## available when loading</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">nbrOfWorkers</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">nbrOfWorkers</span>()</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 </div>
 <div id="asynchronous" class="section level2">
@@ -2129,21 +2120,21 @@ plan(multisession)</p>
 <p>Unlink earlier where we had to wait for future to finish to progress
 in our R session, now we are using a multisession plan we can evaluate
 the expressions/functions asynchronously.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({<span class="fu">Sys.sleep</span>(<span class="dv">1</span>)})</span>
-<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({<span class="fu">Sys.sleep</span>(<span class="dv">1</span>)})</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>res</span></code></pre></div>
 </div>
 <div id="asynchronous---nbroffreeworkers" class="section level2">
 <h2>Asynchronous - nbrOfFreeWorkers</h2>
 <p>We can use the <em>nbrOfFreeWorkers</em> function to see how many
 workers are currently used.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="fu">nbrOfFreeWorkers</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">nbrOfFreeWorkers</span>()</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({<span class="fu">Sys.sleep</span>(<span class="dv">1</span>)})</span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">nbrOfFreeWorkers</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({<span class="fu">Sys.sleep</span>(<span class="dv">1</span>)})</span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a><span class="fu">nbrOfFreeWorkers</span>()</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>]</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a>res</span></code></pre></div>
 <pre><code>## MultisessionFuture:
 ## Label: &lt;unnamed-64&gt;
 ## Expression:
@@ -2162,8 +2153,8 @@ workers are currently used.</p>
 ## Actions: [n=1] &#39;run&#39;
 ## State: &#39;running&#39; (&quot;Future is being evaluated&quot;)
 ## Resolved: FALSE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-64
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-64
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: &#39;MultisessionFuture&#39;, &#39;ClusterFuture&#39;, &#39;MultiprocessFuture&#39;, &#39;Future&#39;
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;</code></pre>
@@ -2171,8 +2162,8 @@ workers are currently used.</p>
 </div>
 <div id="asynchronous-evaluation" class="section level2">
 <h2>Asynchronous evaluation</h2>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="fu">Sys.sleep</span>(<span class="dv">3</span>)</span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="fu">Sys.sleep</span>(<span class="dv">3</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a>res</span></code></pre></div>
 <pre><code>## MultisessionFuture:
 ## Label: &lt;unnamed-64&gt;
 ## Expression:
@@ -2191,8 +2182,8 @@ workers are currently used.</p>
 ## Actions: [n=1] &#39;run&#39;
 ## State: &#39;running&#39; (&quot;Future is being evaluated&quot;)
 ## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-64
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-64
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: &#39;MultisessionFuture&#39;, &#39;ClusterFuture&#39;, &#39;MultiprocessFuture&#39;, &#39;Future&#39;
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;</code></pre>
@@ -2201,25 +2192,25 @@ workers are currently used.</p>
 <h2>Blocking with value</h2>
 <p>When we call value the R session becomes blocked until a value is
 available and/or the future resolves.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
-<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">+</span><span class="dv">4</span></span>
-<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a>  })</span>
-<span id="cb67-5"><a href="#cb67-5" tabindex="-1"></a><span class="fu">value</span>(res)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">+</span><span class="dv">4</span></span>
+<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a>  })</span>
+<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a><span class="fu">value</span>(res)</span></code></pre></div>
 <pre><code>## [1] 5</code></pre>
 </div>
 <div id="the-resolved-function" class="section level2">
 <h2>The resolved() function</h2>
 <p>The <em>resolved</em> function allows you to check if a future has
 finished without blocking the R session.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
-<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
-<span id="cb69-3"><a href="#cb69-3" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">+</span><span class="dv">4</span></span>
-<span id="cb69-4"><a href="#cb69-4" tabindex="-1"></a>  })</span>
-<span id="cb69-5"><a href="#cb69-5" tabindex="-1"></a><span class="fu">resolved</span>(res)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future</span>({</span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">1</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">+</span><span class="dv">4</span></span>
+<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>  })</span>
+<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a><span class="fu">resolved</span>(res)</span></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="fu">Sys.sleep</span>(<span class="dv">2</span>)</span>
-<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a><span class="fu">resolved</span>(res)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="fu">Sys.sleep</span>(<span class="dv">2</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">resolved</span>(res)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>class: inverse, center, middle</p>
 </div>
@@ -2256,18 +2247,18 @@ specialised versions of the apply() family of functions.</p>
 <h2>future.apply</h2>
 <p>Just like apply, future.apply allows you to work across margins of a
 matrix and apply a function to rows, columns or cells.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
-<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a>myMat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="at">ncol=</span><span class="dv">2</span>)</span>
-<span id="cb73-3"><a href="#cb73-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb73-4"><a href="#cb73-4" tabindex="-1"></a><span class="fu">future_apply</span>(myMat,<span class="dv">1</span>,mean)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">library</span>(future.apply)</span>
+<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a>myMat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="at">ncol=</span><span class="dv">2</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a><span class="fu">future_apply</span>(myMat,<span class="dv">1</span>,mean)</span></code></pre></div>
 <pre><code>## [1] 3.5 4.5 5.5 6.5 7.5</code></pre>
 </div>
 <div id="future.lapply" class="section level2">
 <h2>future.lapply</h2>
 <p>Just like lapply, future.lapply allows you to work across
 vectors/lists</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb75-2"><a href="#cb75-2" tabindex="-1"></a><span class="fu">future_lapply</span>(<span class="fu">list</span>(<span class="at">Tom=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">33</span>,<span class="dv">4</span>),<span class="at">Matt=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">44</span>),<span class="at">Jeny=</span><span class="fu">c</span>(<span class="dv">32</span>,<span class="dv">12</span>,<span class="dv">10</span>)),quantile )</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a><span class="fu">future_lapply</span>(<span class="fu">list</span>(<span class="at">Tom=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">33</span>,<span class="dv">4</span>),<span class="at">Matt=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">44</span>),<span class="at">Jeny=</span><span class="fu">c</span>(<span class="dv">32</span>,<span class="dv">12</span>,<span class="dv">10</span>)),quantile )</span></code></pre></div>
 <pre><code>## $Tom
 ##   0%  25%  50%  75% 100% 
 ##  1.0  2.5  4.0 18.5 33.0 
@@ -2284,8 +2275,8 @@ vectors/lists</p>
 <h2>future.sapply</h2>
 <p>Just like sapply, future.sapply allows you to work across
 vectors/lists and returns the data in a <strong>smart</strong> way.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a><span class="fu">future_sapply</span>(<span class="fu">list</span>(<span class="at">Tom=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">33</span>,<span class="dv">4</span>),<span class="at">Matt=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">44</span>),<span class="at">Jeny=</span><span class="fu">c</span>(<span class="dv">32</span>,<span class="dv">12</span>,<span class="dv">10</span>)),quantile)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a><span class="fu">future_sapply</span>(<span class="fu">list</span>(<span class="at">Tom=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">33</span>,<span class="dv">4</span>),<span class="at">Matt=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">44</span>),<span class="at">Jeny=</span><span class="fu">c</span>(<span class="dv">32</span>,<span class="dv">12</span>,<span class="dv">10</span>)),quantile)</span></code></pre></div>
 <pre><code>##       Tom Matt Jeny
 ## 0%    1.0  1.0   10
 ## 25%   2.5  1.5   11
@@ -2298,9 +2289,9 @@ vectors/lists and returns the data in a <strong>smart</strong> way.</p>
 <p>The furrr package extends the purrr package by offering parallel
 versions of its functions.</p>
 <p>This includes a future_map replacement for purrr’s map function.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
-<span id="cb79-2"><a href="#cb79-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future_map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,sqrt)</span>
-<span id="cb79-3"><a href="#cb79-3" tabindex="-1"></a>res</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
+<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">future_map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,sqrt)</span>
+<span id="cb69-3"><a href="#cb69-3" tabindex="-1"></a>res</span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -2335,13 +2326,13 @@ versions of its functions.</p>
 <h2>future map</h2>
 <p>This means you can use future_map as a drop in replacement for map in
 your dplyr workflows.</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
-<span id="cb81-2"><a href="#cb81-2" tabindex="-1"></a></span>
-<span id="cb81-3"><a href="#cb81-3" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">split</span>(mtcars, mtcars<span class="sc">$</span>cyl)</span>
-<span id="cb81-4"><a href="#cb81-4" tabindex="-1"></a></span>
-<span id="cb81-5"><a href="#cb81-5" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">future_map</span>(datasets, <span class="sc">~</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> .x))</span></code></pre></div>
-<pre><code>## Warning in serializedSize(x): &#39;package:dplyr&#39; may not be available when loading</code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a>models</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
+<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" tabindex="-1"></a>datasets <span class="ot">&lt;-</span> <span class="fu">split</span>(mtcars, mtcars<span class="sc">$</span>cyl)</span>
+<span id="cb71-4"><a href="#cb71-4" tabindex="-1"></a></span>
+<span id="cb71-5"><a href="#cb71-5" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">future_map</span>(datasets, <span class="sc">~</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> .x))</span>
+<span id="cb71-6"><a href="#cb71-6" tabindex="-1"></a></span>
+<span id="cb71-7"><a href="#cb71-7" tabindex="-1"></a>models</span></code></pre></div>
 <pre><code>## $`4`
 ## 
 ## Call:
@@ -2379,13 +2370,13 @@ package in a future parallelisation framework.</p>
 function before we set our plan and use the special
 <strong>%dopar%</strong> operator to set the function/expression to
 parallelise.</p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" tabindex="-1"></a><span class="fu">library</span>(doFuture)</span>
-<span id="cb85-2"><a href="#cb85-2" tabindex="-1"></a><span class="fu">registerDoFuture</span>()</span>
-<span id="cb85-3"><a href="#cb85-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb85-4"><a href="#cb85-4" tabindex="-1"></a></span>
-<span id="cb85-5"><a href="#cb85-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%dopar%</span> {</span>
-<span id="cb85-6"><a href="#cb85-6" tabindex="-1"></a>  <span class="fu">sqrt</span>(x)</span>
-<span id="cb85-7"><a href="#cb85-7" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a><span class="fu">library</span>(doFuture)</span>
+<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a><span class="fu">registerDoFuture</span>()</span>
+<span id="cb73-3"><a href="#cb73-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb73-4"><a href="#cb73-4" tabindex="-1"></a></span>
+<span id="cb73-5"><a href="#cb73-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%dopar%</span> {</span>
+<span id="cb73-6"><a href="#cb73-6" tabindex="-1"></a>  <span class="fu">sqrt</span>(x)</span>
+<span id="cb73-7"><a href="#cb73-7" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="dofuture-and-biocparallel" class="section level2">
 <h2>doFuture and BiocParallel</h2>
@@ -2393,12 +2384,12 @@ parallelise.</p>
 Bioconductor framework.</p>
 <p>BiocParallel is used internally in many Bioconductor package
 functions so havbing control of this with future is important</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;doFuture&quot;</span>)</span>
-<span id="cb86-2"><a href="#cb86-2" tabindex="-1"></a><span class="fu">registerDoFuture</span>()</span>
-<span id="cb86-3"><a href="#cb86-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;BiocParallel&quot;</span>)</span>
-<span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="fu">register</span>(<span class="fu">DoparParam</span>(), <span class="at">default =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb86-6"><a href="#cb86-6" tabindex="-1"></a>myRes <span class="ot">&lt;-</span> <span class="fu">bplapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,sqrt)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;doFuture&quot;</span>)</span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a><span class="fu">registerDoFuture</span>()</span>
+<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;BiocParallel&quot;</span>)</span>
+<span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a><span class="fu">register</span>(<span class="fu">DoparParam</span>(), <span class="at">default =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb74-6"><a href="#cb74-6" tabindex="-1"></a>myRes <span class="ot">&lt;-</span> <span class="fu">bplapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,sqrt)</span></code></pre></div>
 </div>
 <div id="future.batchtools" class="section level2">
 <h2>future.batchtools</h2>
@@ -2406,8 +2397,8 @@ functions so havbing control of this with future is important</p>
 advantage of the job scheduler.</p>
 <p>Job schedulers such as slurm, sge, torque and LSF are all catered for
 by the batchtools package, here wrapped in future.batchtools.</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" tabindex="-1"></a><span class="fu">library</span>(future.batchtools)</span>
-<span id="cb87-2"><a href="#cb87-2" tabindex="-1"></a><span class="fu">plan</span>(batchtools_slurm)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">library</span>(future.batchtools)</span>
+<span id="cb75-2"><a href="#cb75-2" tabindex="-1"></a><span class="fu">plan</span>(batchtools_slurm)</span></code></pre></div>
 </div>
 <div id="future.batchtools-template" class="section level2">
 <h2>future.batchtools template</h2>
@@ -2415,8 +2406,8 @@ by the batchtools package, here wrapped in future.batchtools.</p>
 on your own HPC environment.</p>
 <p>Altered templates can be specified in the plan function using
 template argument.</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" tabindex="-1"></a><span class="fu">library</span>(future.batchtools)</span>
-<span id="cb88-2"><a href="#cb88-2" tabindex="-1"></a><span class="fu">plan</span>(batchtools_slurm,<span class="at">template=</span><span class="st">&quot;path/to/slurm_template.tmpl&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="fu">library</span>(future.batchtools)</span>
+<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a><span class="fu">plan</span>(batchtools_slurm,<span class="at">template=</span><span class="st">&quot;path/to/slurm_template.tmpl&quot;</span>)</span></code></pre></div>
 <p>class: inverse, center, middle</p>
 </div>
 </div>
@@ -2433,10 +2424,9 @@ template argument.</p>
 <h2>Futurize</h2>
 <p>The futurize package offers a perhaps easier way to parallelise your
 analysis.</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="fu">library</span>(futurize)</span>
-<span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,sqrt) <span class="sc">|&gt;</span> <span class="fu">futurize</span>() </span></code></pre></div>
-<pre><code>## Warning in serializedSize(x): &#39;package:dplyr&#39; may not be available when loading</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="fu">library</span>(futurize)</span>
+<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a><span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,sqrt) <span class="sc">|&gt;</span> <span class="fu">futurize</span>() </span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -2467,10 +2457,9 @@ analysis.</p>
 ## [[10]]
 ## [1] 3.162278</code></pre>
 <p>]</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" tabindex="-1"></a><span class="fu">sapply</span>(<span class="fu">list</span>(<span class="at">Tom=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">33</span>,<span class="dv">4</span>),</span>
-<span id="cb92-2"><a href="#cb92-2" tabindex="-1"></a>            <span class="at">Matt=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">44</span>),</span>
-<span id="cb92-3"><a href="#cb92-3" tabindex="-1"></a>            <span class="at">eny=</span><span class="fu">c</span>(<span class="dv">32</span>,<span class="dv">12</span>,<span class="dv">10</span>)),quantile) <span class="sc">|&gt;</span> <span class="fu">futurize</span>() </span></code></pre></div>
-<pre><code>## Warning in serializedSize(x): &#39;package:dplyr&#39; may not be available when loading</code></pre>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="fu">sapply</span>(<span class="fu">list</span>(<span class="at">Tom=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">33</span>,<span class="dv">4</span>),</span>
+<span id="cb79-2"><a href="#cb79-2" tabindex="-1"></a>            <span class="at">Matt=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">44</span>),</span>
+<span id="cb79-3"><a href="#cb79-3" tabindex="-1"></a>            <span class="at">eny=</span><span class="fu">c</span>(<span class="dv">32</span>,<span class="dv">12</span>,<span class="dv">10</span>)),quantile) <span class="sc">|&gt;</span> <span class="fu">futurize</span>() </span></code></pre></div>
 <pre><code>##       Tom Matt eny
 ## 0%    1.0  1.0  10
 ## 25%   2.5  1.5  11
@@ -2485,13 +2474,13 @@ analysis.</p>
 the futurize</p>
 <p>A full list of functions and packages supported by futurize cann be
 found <a href="https://futurize.futureverse.org">here</a></p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
-<span id="cb95-2"><a href="#cb95-2" tabindex="-1"></a><span class="fu">library</span>(futurize)</span>
-<span id="cb95-3"><a href="#cb95-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb95-4"><a href="#cb95-4" tabindex="-1"></a>cnts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnbinom</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">size=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">0.5</span>), <span class="at">ncol=</span><span class="dv">10</span>)</span>
-<span id="cb95-5"><a href="#cb95-5" tabindex="-1"></a>cond <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">5</span>))</span>
-<span id="cb95-6"><a href="#cb95-6" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(cnts, <span class="fu">DataFrame</span>(cond), <span class="sc">~</span> cond)</span>
-<span id="cb95-7"><a href="#cb95-7" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds) <span class="sc">|&gt;</span> <span class="fu">futurize</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb81-2"><a href="#cb81-2" tabindex="-1"></a><span class="fu">library</span>(futurize)</span>
+<span id="cb81-3"><a href="#cb81-3" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb81-4"><a href="#cb81-4" tabindex="-1"></a>cnts <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnbinom</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">mu=</span><span class="dv">100</span>, <span class="at">size=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">0.5</span>), <span class="at">ncol=</span><span class="dv">10</span>)</span>
+<span id="cb81-5"><a href="#cb81-5" tabindex="-1"></a>cond <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each=</span><span class="dv">5</span>))</span>
+<span id="cb81-6"><a href="#cb81-6" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(cnts, <span class="fu">DataFrame</span>(cond), <span class="sc">~</span> cond)</span>
+<span id="cb81-7"><a href="#cb81-7" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds) <span class="sc">|&gt;</span> <span class="fu">futurize</span>()</span></code></pre></div>
 </div>
 </div>
 <div id="when-to-use-future" class="section level1">

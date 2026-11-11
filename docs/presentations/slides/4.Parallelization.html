@@ -185,7 +185,7 @@ myFirstFuture
 ## Label: &lt;unnamed-1&gt;
 ## Expression:
 ## mean(10, 20, 30)
-## Globals: 1 objects totaling 42.46 MiB (standardGeneric 'mean' of 72.29 KiB)
+## Globals: 1 objects totaling 72.71 KiB (standardGeneric 'mean' of 72.29 KiB)
 ## Packages: &lt;none&gt;
 ## L'Ecuyer-CMRG RNG seed: &lt;none&gt; (seed = FALSE)
 ## Capture standard output: TRUE
@@ -197,12 +197,12 @@ myFirstFuture
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-1
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-1
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 39 bytes of class 'numeric'
-## Duration: 0.03047991 secs (started 2026-10-11 07:20:05.619073)
-## Worker process: d222592b706f3632d488fb0f82b28e94
+## Duration: 0.02164078 secs (started 2026-11-11 07:11:53.944355)
+## Worker process: 024b9926f638b07fbe2280a94d89e802
 ```
 
 ---
@@ -270,7 +270,7 @@ myfuture
 ## {
 ##     x + y
 ## }
-## Globals: 2 objects totaling 42.53 MiB (numeric 'x' of 39 bytes, numeric 'y' of 39 bytes)
+## Globals: 2 objects totaling 524 bytes (numeric 'x' of 39 bytes, numeric 'y' of 39 bytes)
 ## Packages: &lt;none&gt;
 ## L'Ecuyer-CMRG RNG seed: &lt;none&gt; (seed = FALSE)
 ## Capture standard output: TRUE
@@ -282,12 +282,12 @@ myfuture
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-3
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-3
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 39 bytes of class 'numeric'
-## Duration: 0.002942324 secs (started 2026-10-11 07:20:06.081234)
-## Worker process: d222592b706f3632d488fb0f82b28e94
+## Duration: 0.002134562 secs (started 2026-11-11 07:11:54.013949)
+## Worker process: 024b9926f638b07fbe2280a94d89e802
 ```
 
 ---
@@ -351,14 +351,7 @@ myfuture
 ## {
 ##     as_tibble(1:10)
 ## }
-```
-
-```
-## Warning in serializedSize(x): 'package:dplyr' may not be available when loading
-```
-
-```
-## Globals: 1 objects totaling 1.09 KiB (function 'as_tibble' of 774 bytes)
+## Globals: 1 objects totaling 1.20 KiB (function 'as_tibble' of 774 bytes)
 ## Packages: 1 packages ('tibble')
 ## L'Ecuyer-CMRG RNG seed: &lt;none&gt; (seed = FALSE)
 ## Capture standard output: TRUE
@@ -370,12 +363,12 @@ myfuture
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-5
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-5
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 300 bytes of class 'tbl_df'
-## Duration: 0.003367424 secs (started 2026-10-11 07:20:06.524029)
-## Worker process: d222592b706f3632d488fb0f82b28e94
+## Duration: 0.00244832 secs (started 2026-11-11 07:11:54.041741)
+## Worker process: 024b9926f638b07fbe2280a94d89e802
 ```
 
 ---
@@ -535,12 +528,12 @@ res
 ## Actions: [n=1] 'run'
 ## State: 'finished' ("Future was resolved successfully")
 ## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-16
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-16
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: 'SequentialFuture', 'UniprocessFuture', 'Future'
 ## Value: 27 bytes of class 'NULL'
-## Duration: 2.005321 secs (started 2026-10-11 07:20:06.6602)
-## Worker process: d222592b706f3632d488fb0f82b28e94
+## Duration: 2.004642 secs (started 2026-11-11 07:11:54.141591)
+## Worker process: 024b9926f638b07fbe2280a94d89e802
 ```
 
 ---
@@ -568,7 +561,7 @@ plan()
 ## - call: plan(sequential)
 ## SequentialFutureBackend:
 ## Inherits: FutureBackend
-## UUID: edaa81dc9aec41dec4e93194c9e15a16
+## UUID: 1b3f516b61bd772c3e09cd4e3ef4fba0
 ## Number of workers: 1
 ## Number of free workers: 1
 ## Available cores: 4
@@ -580,7 +573,7 @@ plan()
 ## Argument 'hooks': FALSE
 ## Number of active futures: 0
 ## Number of futures since start: 16 (16 created, 16 launched, 16 finished)
-## Total runtime of futures: 2.075409 secs (0.129713 secs/finished future)
+## Total runtime of futures: 2.054913 secs (0.1284321 secs/finished future)
 ```
 
 
@@ -610,11 +603,6 @@ This works on all operating systems including Windows.
 
 ``` r
 plan(multisession)
-```
-
-```
-## Warning in serialize(x, connection = NULL): 'package:dplyr' may not be
-## available when loading
 ```
 
 ---
@@ -649,11 +637,6 @@ To take advantage of HPC environments we would recommend the extension package *
 
 ``` r
 plan(cluster)
-```
-
-```
-## Warning in serialize(x, connection = NULL): 'package:dplyr' may not be
-## available when loading
 ```
 
 ---
@@ -704,14 +687,6 @@ nbrOfWorkers()
 
 ``` r
 plan(multisession)
-```
-
-```
-## Warning in serialize(x, connection = NULL): 'package:dplyr' may not be
-## available when loading
-```
-
-``` r
 nbrOfWorkers()
 ```
 
@@ -782,8 +757,8 @@ res
 ## Actions: [n=1] 'run'
 ## State: 'running' ("Future is being evaluated")
 ## Resolved: FALSE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-17
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-17
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: 'MultisessionFuture', 'ClusterFuture', 'MultiprocessFuture', 'Future'
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;
@@ -818,8 +793,8 @@ res
 ## Actions: [n=1] 'run'
 ## State: 'running' ("Future is being evaluated")
 ## Resolved: TRUE
-## Unique identifier: d222592b706f3632d488fb0f82b28e94-17
-## Owner process: d222592b706f3632d488fb0f82b28e94
+## Unique identifier: 024b9926f638b07fbe2280a94d89e802-17
+## Owner process: 024b9926f638b07fbe2280a94d89e802
 ## Class: 'MultisessionFuture', 'ClusterFuture', 'MultiprocessFuture', 'Future'
 ## Value: &lt;not collected&gt;
 ## Conditions captured: &lt;none&gt;
@@ -1020,13 +995,7 @@ library(furrr)
 datasets &lt;- split(mtcars, mtcars$cyl)
 
 models &lt;- future_map(datasets, ~ lm(mpg ~ wt, data = .x))
-```
 
-```
-## Warning in serializedSize(x): 'package:dplyr' may not be available when loading
-```
-
-``` r
 models
 ```
 
@@ -1144,10 +1113,6 @@ lapply(1:10,sqrt) |&gt; futurize()
 ```
 
 ```
-## Warning in serializedSize(x): 'package:dplyr' may not be available when loading
-```
-
-```
 ## [[1]]
 ## [1] 1
 ## 
@@ -1186,10 +1151,6 @@ lapply(1:10,sqrt) |&gt; futurize()
 sapply(list(Tom=c(1,33,4),
             Matt=c(2,1,44),
             eny=c(32,12,10)),quantile) |&gt; futurize() 
-```
-
-```
-## Warning in serializedSize(x): 'package:dplyr' may not be available when loading
 ```
 
 ```
